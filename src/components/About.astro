@@ -1,0 +1,77 @@
+---
+import { Image } from "astro:assets";
+import { useTranslations, asLocale } from "../i18n/utils";
+import Icon from "./Icon.astro";
+import Reveal from "./Reveal.astro";
+import logo from "../assets/logo.png";
+
+const locale = asLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+---
+
+<section id={t.nav.about.anchor} class="bg-surface py-16 md:py-28 lg:py-32">
+  <div class="container-site">
+    <div class="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+      <Reveal>
+        <h2
+          class="font-display text-[clamp(1.9rem,4vw,2.75rem)] leading-tight font-bold tracking-tight text-primary"
+        >
+          {t.about.h2}
+        </h2>
+        <div class="mt-6 space-y-5 text-muted">
+          {t.about.paragraphs.map((p) => <p>{p}</p>)}
+        </div>
+      </Reveal>
+
+      <Reveal delay={120}>
+        <figure
+          class="rounded-3xl border border-line bg-surface-2 p-8 sm:p-10"
+        >
+          <Image
+            src={logo}
+            alt={t.about.logoAlt}
+            width={640}
+            densities={[1, 2]}
+            loading="lazy"
+            class="mx-auto h-auto w-full max-w-md"
+          />
+          {/*
+            TÜRSAB: once the agency licence is granted, replace this comment
+            with the TÜRSAB certificate badge + licence number, e.g.
+            <figcaption class="mt-6 flex items-center justify-center gap-3 text-sm text-muted">
+              <img src="/tursab-badge.svg" alt="TÜRSAB" width="40" height="40" />
+              TÜRSAB Belge No: XXXXX
+            </figcaption>
+            (Also update the matching placeholder in Footer.astro.)
+          */}
+        </figure>
+      </Reveal>
+    </div>
+
+    <div class="mt-16 md:mt-24">
+      <Reveal>
+        <h3
+          class="font-display text-2xl font-semibold tracking-tight text-primary md:text-3xl"
+        >
+          {t.about.whyTitle}
+        </h3>
+      </Reveal>
+      <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:gap-6">
+        {
+          t.about.why.map((item, i) => (
+            <Reveal
+              as="li"
+              delay={i * 90}
+              class="group flex h-full items-center gap-5 rounded-2xl border border-line bg-surface p-6 transition duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgb(11_18_38/0.09)]"
+            >
+              <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-primary text-accent-soft transition-colors duration-300 group-hover:bg-primary-soft">
+                <Icon name={item.icon} class="h-6 w-6" />
+              </span>
+              <span class="font-medium text-ink">{item.text}</span>
+            </Reveal>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,112 @@
+---
+import { site, waUrl } from "../config/site";
+import { useTranslations, asLocale } from "../i18n/utils";
+import Icon from "./Icon.astro";
+import Reveal from "./Reveal.astro";
+
+const locale = asLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+const wa = waUrl(locale);
+---
+
+<section
+  id={t.nav.contact.anchor}
+  class="relative overflow-hidden bg-primary-deep py-16 text-white md:py-28 lg:py-32"
+>
+  <!-- Soft nova glow, echoing the hero -->
+  <div
+    class="pointer-events-none absolute inset-0"
+    style="background: radial-gradient(700px 420px at 85% 0%, rgb(195 154 62 / 0.12), transparent 65%);"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="container-site relative">
+    <div class="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+      <Reveal>
+        <h2
+          class="font-display text-[clamp(1.9rem,4vw,2.75rem)] leading-tight font-bold tracking-tight"
+        >
+          {t.contact.h2}
+        </h2>
+        <p class="mt-6 max-w-xl text-white/75">{t.contact.body}</p>
+
+        <a
+          href={wa}
+          target="_blank"
+          rel="noopener"
+          class="mt-10 inline-flex min-h-14 items-center gap-3 rounded-full bg-wa-strong px-8 py-4 text-lg font-semibold text-white shadow-[0_12px_32px_rgb(21_128_61/0.4)] transition-transform duration-200 hover:scale-[1.03] hover:bg-wa-deep active:scale-[0.99]"
+        >
+          <Icon name="whatsapp" class="h-6 w-6" />
+          {t.contact.cta}
+        </a>
+      </Reveal>
+
+      <Reveal delay={120}>
+        <ul
+          class="space-y-3 rounded-3xl border border-white/10 bg-white/5 p-6 sm:p-8"
+        >
+          <li class="flex items-center gap-4 py-2">
+            <span
+              class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white/10 text-accent-soft"
+            >
+              <Icon name="pin" class="h-5.5 w-5.5" />
+            </span>
+            <span>
+              <span class="block text-sm text-white/60">{t.contact.rows.location}</span>
+              <span class="font-medium">{site.location}</span>
+            </span>
+          </li>
+
+          <li class="flex items-center gap-4 py-2">
+            <span
+              class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white/10 text-accent-soft"
+            >
+              <Icon name="whatsapp" class="h-5.5 w-5.5" />
+            </span>
+            <span>
+              <span class="block text-sm text-white/60">{t.contact.rows.whatsapp}</span>
+              <a
+                href={wa}
+                target="_blank"
+                rel="noopener"
+                class="font-medium underline-offset-4 hover:text-accent-soft hover:underline"
+              >
+                {site.phoneDisplay}
+              </a>
+            </span>
+          </li>
+
+          <li class="flex items-center gap-4 py-2">
+            <span
+              class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white/10 text-accent-soft"
+            >
+              <Icon name="mail" class="h-5.5 w-5.5" />
+            </span>
+            <span>
+              <span class="block text-sm text-white/60">{t.contact.rows.email}</span>
+              <a
+                href={`mailto:${site.email}`}
+                class="font-medium underline-offset-4 hover:text-accent-soft hover:underline"
+              >
+                {site.email}
+              </a>
+            </span>
+          </li>
+
+          <li class="flex items-center gap-4 py-2">
+            <span
+              class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white/10 text-accent-soft"
+            >
+              <Icon name="clock" class="h-5.5 w-5.5" />
+            </span>
+            <span>
+              <span class="block text-sm text-white/60">{t.contact.rows.hours}</span>
+              <span class="font-medium">{t.contact.hoursValue}</span>
+            </span>
+          </li>
+        </ul>
+      </Reveal>
+    </div>
+  </div>
+</section>

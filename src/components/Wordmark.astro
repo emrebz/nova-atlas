@@ -1,0 +1,26 @@
+---
+/**
+ * SVG-crisp brand lockup (gold nova star + wordmark) used in header & footer.
+ * The raster logo (docs/logo) is showcased in the About section; this lockup
+ * stays legible at small sizes and inherits the header's color state.
+ * Subtitle color can be themed via the `--wm-sub` custom property.
+ */
+import Icon from "./Icon.astro";
+
+interface Props {
+  suffix: string; // "Turizm" | "Travel"
+}
+
+const { suffix } = Astro.props;
+---
+
+<span class="inline-flex items-center gap-2.5">
+  <Icon name="star4" class="h-6 w-6 shrink-0 text-accent" />
+  <span class="flex flex-col justify-center leading-none">
+    <span class="font-display text-[1.2rem] font-bold tracking-tight">NovaAtlas</span>
+    <span
+      class="mt-1 text-[0.62rem] font-semibold tracking-[0.34em] uppercase"
+      style="color: var(--wm-sub, var(--brand-accent-strong))">{suffix}</span
+    >
+  </span>
+</span>

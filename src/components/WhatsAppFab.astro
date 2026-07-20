@@ -1,0 +1,63 @@
+---
+import { waUrl } from "../config/site";
+import { useTranslations, asLocale } from "../i18n/utils";
+import Icon from "./Icon.astro";
+
+const locale = asLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+---
+
+<a
+  id="wa-fab"
+  href={waUrl(locale)}
+  target="_blank"
+  rel="noopener"
+  aria-label={t.a11y.waFab}
+  class="fixed z-40 grid h-14 w-14 place-items-center rounded-full bg-wa text-white shadow-[0_10px_30px_rgb(11_18_38/0.35)] transition duration-200 hover:scale-108"
+>
+  <Icon name="whatsapp" class="h-7 w-7" />
+</a>
+
+<style>
+  #wa-fab {
+    /* Thumb-reachable, clear of iOS home indicator */
+    right: calc(1.25rem + env(safe-area-inset-right, 0px));
+    bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+    animation: fab-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.4s backwards;
+  }
+
+  @keyframes fab-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.8);
+    }
+  }
+
+  /* Slides away while the footer is on screen so it never covers its content */
+  #wa-fab.fab-hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #wa-fab {
+      animation: none;
+    }
+    #wa-fab.fab-hidden {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  const fab = document.getElementById("wa-fab")!;
+  const footer = document.getElementById("site-footer");
+
+  if (footer && "IntersectionObserver" in window) {
+    new IntersectionObserver(
+      ([entry]) => fab.classList.toggle("fab-hidden", entry.isIntersecting),
+      { threshold: 0.05 }
+    ).observe(footer);
+  }
+</script>

@@ -1,0 +1,46 @@
+---
+/**
+ * Scroll-reveal wrapper — gentle fade/slide-in when the element enters the
+ * viewport. Content is ALWAYS visible without JS and under
+ * `prefers-reduced-motion: reduce` (see global.css).
+ */
+interface Props {
+  /** Rendered element — use "li" inside lists so markup stays valid */
+  as?: "div" | "li";
+  /** Stagger delay in ms */
+  delay?: number;
+  class?: string;
+}
+
+const { as: Tag = "div", delay = 0, class: className } = Astro.props;
+---
+
+<Tag
+  data-reveal
+  class={className}
+  style={delay ? `--reveal-delay:${delay}ms` : undefined}
+>
+  <slot />
+</Tag>
+
+<script>
+  const items = document.querySelectorAll("[data-reveal]");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (reduce || !("IntersectionObserver" in window)) {
+    items.forEach((el) => el.classList.add("revealed"));
+  } else {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("revealed");
+            io.unobserve(entry.target);
+          }
+        }
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.1 }
+    );
+    items.forEach((el) => io.observe(el));
+  }
+</script>
