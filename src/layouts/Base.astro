@@ -21,11 +21,14 @@ const trUrl = new URL("/", site.url).href;
 const enUrl = new URL("/en/", site.url).href;
 const ogImage = new URL("/og-image.jpg", site.url).href;
 
-const jsonLd = {
+const travelAgency = {
   "@context": "https://schema.org",
   "@type": "TravelAgency",
+  "@id": `${site.url}/#organization`,
   name: site.brand,
-  url: canonical,
+  alternateName: site.alternateNames,
+  url: `${site.url}/`,
+  description: t.meta.description,
   telephone: `+${site.phoneRaw}`,
   email: site.email,
   image: ogImage,
@@ -39,12 +42,91 @@ const jsonLd = {
   sameAs: Object.values(site.social),
 };
 
+const website = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${site.url}/#website`,
+  name: site.brand,
+  alternateName: site.alternateNames,
+  url: `${site.url}/`,
+  inLanguage: ["tr", "en"],
+  publisher: { "@id": `${site.url}/#organization` },
+};
+
+const structuredData =
+  Astro.url.pathname === "/" ? [travelAgency, website] : [travelAgency];
+
 const preloadFonts = [bricolage700, bricolage700Ext, inter400, inter400Ext];
 ---
 
 <html lang={locale}>
   <head>
     <meta charset="utf-8" />
+    <script is:inline>
+      (() => {
+        const storageKey = "nova-atlas-theme";
+        const root = document.documentElement;
+        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+
+        const storedTheme = () => {
+          try {
+            const value = localStorage.getItem(storageKey);
+            return value === "light" || value === "dark" ? value : null;
+          } catch {
+            return null;
+          }
+        };
+
+        const syncControls = (theme) => {
+          document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
+            const nextTheme = theme === "dark" ? "light" : "dark";
+            const label =
+              nextTheme === "dark"
+                ? button.dataset.labelDark
+                : button.dataset.labelLight;
+
+            button.setAttribute("aria-pressed", String(theme === "dark"));
+            if (label) {
+              button.setAttribute("aria-label", label);
+              button.setAttribute("title", label);
+            }
+          });
+        };
+
+        const applyTheme = (theme, source) => {
+          root.dataset.theme = theme;
+          root.dataset.themeSource = source;
+          root.style.colorScheme = theme;
+          syncControls(theme);
+        };
+
+        const saved = storedTheme();
+        applyTheme(saved ?? (systemTheme.matches ? "dark" : "light"), saved ? "user" : "system");
+
+        systemTheme.addEventListener("change", (event) => {
+          if (!storedTheme()) applyTheme(event.matches ? "dark" : "light", "system");
+        });
+
+        document.addEventListener("click", (event) => {
+          const target = event.target;
+          if (!(target instanceof Element)) return;
+          const button = target.closest("[data-theme-toggle]");
+          if (!button) return;
+
+          const nextTheme = root.dataset.theme === "dark" ? "light" : "dark";
+          try {
+            localStorage.setItem(storageKey, nextTheme);
+          } catch {
+            // Theme still changes for this page when storage is unavailable.
+          }
+          applyTheme(nextTheme, "user");
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+          syncControls(root.dataset.theme ?? "light");
+        });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{t.meta.title}</title>
     <meta name="description" content={t.meta.description} />
@@ -89,7 +171,11 @@ const preloadFonts = [bricolage700, bricolage700Ext, inter400, inter400Ext];
       ))
     }
 
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    {
+      structuredData.map((item) => (
+        <script type="application/ld+json" set:html={JSON.stringify(item)} />
+      ))
+    }
 
     <!-- Flags JS availability so scroll-reveal styles never hide content without it -->
     <script is:inline>

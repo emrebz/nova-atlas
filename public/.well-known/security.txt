@@ -1,0 +1,4 @@
+Contact: mailto:info@novaatlastur.com
+Expires: 2027-06-30T23:59:59Z
+Canonical: https://novaatlastur.com/.well-known/security.txt
+Preferred-Languages: tr, en

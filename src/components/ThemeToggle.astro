@@ -1,0 +1,42 @@
+---
+import Icon from "./Icon.astro";
+
+interface Props {
+  toDarkLabel: string;
+  toLightLabel: string;
+}
+
+const { toDarkLabel, toLightLabel } = Astro.props;
+---
+
+<button
+  type="button"
+  data-theme-toggle
+  data-label-dark={toDarkLabel}
+  data-label-light={toLightLabel}
+  aria-label={toDarkLabel}
+  title={toDarkLabel}
+  aria-pressed="false"
+  class="theme-toggle grid size-11 shrink-0 place-items-center rounded-lg text-current transition-colors hover:text-accent-soft"
+>
+  <span class="theme-icon theme-icon-moon" aria-hidden="true">
+    <Icon name="moon" class="h-5 w-5" />
+  </span>
+  <span class="theme-icon theme-icon-sun" aria-hidden="true">
+    <Icon name="sun" class="h-5 w-5" />
+  </span>
+</button>
+
+<style>
+  .theme-icon-sun {
+    display: none;
+  }
+
+  :global(html[data-theme="dark"]) .theme-icon-moon {
+    display: none;
+  }
+
+  :global(html[data-theme="dark"]) .theme-icon-sun {
+    display: inline-flex;
+  }
+</style>

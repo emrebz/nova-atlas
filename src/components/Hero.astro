@@ -27,25 +27,29 @@ const t = useTranslations(locale);
     preserveAspectRatio="xMidYMid slice"
     aria-hidden="true"
   >
-    <g fill="#ffffff">
+    <g fill="#ffffff" class="twinkle-a">
       <circle cx="120" cy="140" r="1.6" opacity="0.55"></circle>
-      <circle cx="310" cy="260" r="1.1" opacity="0.35"></circle>
       <circle cx="520" cy="110" r="1.4" opacity="0.5"></circle>
-      <circle cx="760" cy="220" r="1.1" opacity="0.3"></circle>
       <circle cx="930" cy="90" r="1.7" opacity="0.55"></circle>
-      <circle cx="1120" cy="300" r="1.2" opacity="0.4"></circle>
       <circle cx="1280" cy="150" r="1.5" opacity="0.5"></circle>
-      <circle cx="1390" cy="330" r="1.1" opacity="0.35"></circle>
       <circle cx="220" cy="420" r="1.2" opacity="0.3"></circle>
-      <circle cx="1010" cy="430" r="1.3" opacity="0.35"></circle>
       <circle cx="640" cy="360" r="1.1" opacity="0.28"></circle>
     </g>
-    <!-- Nova star, echoing the logo mark -->
-    <g transform="translate(1150 170)" fill="var(--brand-accent)">
-      <path
-        d="M0 -46L10 -10L46 0L10 10L0 46L-10 10L-46 0L-10 -10Z"
-        opacity="0.9"></path>
-      <circle r="60" fill="url(#nova-halo)"></circle>
+    <g fill="#ffffff" class="twinkle-b">
+      <circle cx="310" cy="260" r="1.1" opacity="0.35"></circle>
+      <circle cx="760" cy="220" r="1.1" opacity="0.3"></circle>
+      <circle cx="1120" cy="300" r="1.2" opacity="0.4"></circle>
+      <circle cx="1390" cy="330" r="1.1" opacity="0.35"></circle>
+      <circle cx="1010" cy="430" r="1.3" opacity="0.35"></circle>
+    </g>
+    <!-- Nova star, echoing the logo mark (outer g positions, inner g animates) -->
+    <g transform="translate(1150 170)">
+      <g fill="var(--brand-accent)" class="nova-star">
+        <path
+          d="M0 -46L10 -10L46 0L10 10L0 46L-10 10L-46 0L-10 -10Z"
+          opacity="0.9"></path>
+        <circle r="60" fill="url(#nova-halo)"></circle>
+      </g>
     </g>
     <!-- Faint atlas meridians -->
     <g
@@ -134,6 +138,41 @@ const t = useTranslations(locale);
       var(--brand-primary) 58%,
       #20305c 100%
     );
+  }
+
+  /* Gentle sky life: twinkling stars + a slowly breathing nova.
+     The global prefers-reduced-motion rule in global.css disables these. */
+  .twinkle-a {
+    animation: twinkle 7s ease-in-out infinite alternate;
+  }
+
+  .twinkle-b {
+    animation: twinkle 9s ease-in-out 2.5s infinite alternate-reverse;
+  }
+
+  @keyframes twinkle {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0.35;
+    }
+  }
+
+  .nova-star {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: nova-breathe 9s ease-in-out infinite;
+  }
+
+  @keyframes nova-breathe {
+    0%,
+    100% {
+      transform: translateY(0) scale(1);
+    }
+    50% {
+      transform: translateY(-9px) scale(1.06);
+    }
   }
 
   /* The single brand gradient token, used as a soft atmospheric wash */

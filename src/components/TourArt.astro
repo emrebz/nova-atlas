@@ -1,0 +1,130 @@
+---
+/**
+ * Flat, on-brand illustrations for the mock tour cards — inline SVG, so no
+ * image requests and instant paint. All four scenes share the same warm
+ * cream sky + navy/gold family derived from the logo, each with one scene hue.
+ */
+interface Props {
+  name: "kapadokya" | "pamukkale" | "karadeniz" | "ege" | string;
+}
+
+const { name } = Astro.props;
+---
+
+{
+  name === "kapadokya" && (
+    <svg viewBox="0 0 400 250" class="h-full w-full" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <linearGradient id="kap-sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#FBF4E4" />
+          <stop offset="1" stop-color="#F3DDAE" />
+        </linearGradient>
+        <g id="kap-balloon">
+          <path d="M-26 0a26 26 0 0 1 52 0c0 16-12 25-19 35h-14c-7-10-19-19-19-35Z" fill="#C7A14B" />
+          <path d="M-8 -25c-5 8-7 44 0 60h16c7-16 5-52 0-60a26 26 0 0 0-16 0Z" fill="#C7A14B" />
+          <path d="M-5 -25.5c-4 9-5 45 0 61h10c5-16 4-52 0-61a26 26 0 0 0-10 0Z" fill="#2A3760" />
+          <path d="M-8 35h16l-2 11h-12Z" fill="#2A3760" />
+        </g>
+      </defs>
+      <rect width="400" height="250" fill="url(#kap-sky)" />
+      <circle cx="326" cy="70" r="30" fill="#E9BC55" />
+      <path d="M0 200c60-16 120-24 200-18s140 14 200 6v62H0Z" fill="#E5CC9C" />
+      <g fill="#C77A4A">
+        <path d="M56 250v-72c0-13 9-21 19-21s19 8 19 21v72Z" />
+        <path d="M124 250v-52c0-10 7-17 15-17s15 7 15 17v52Z" />
+        <path d="M320 250v-44c0-9 6-14 13-14s13 5 13 14v44Z" />
+      </g>
+      <g fill="#A55E36">
+        <path d="M99 160H51l9-22c3-8 9-13 15-13s12 5 15 13Z" />
+        <path d="M158 184h-38l7-17c3-6 7-10 12-10s9 4 12 10Z" />
+        <path d="M350 196h-34l6-15c3-5 6-8 11-8s8 3 11 8Z" />
+      </g>
+      <use href="#kap-balloon" transform="translate(218 62)" />
+      <use href="#kap-balloon" transform="translate(120 84) scale(.6)" />
+    </svg>
+  )
+}
+
+{
+  name === "pamukkale" && (
+    <svg viewBox="0 0 400 250" class="h-full w-full" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <linearGradient id="pam-sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#FBF4E4" />
+          <stop offset="1" stop-color="#F0E4C2" />
+        </linearGradient>
+      </defs>
+      <rect width="400" height="250" fill="url(#pam-sky)" />
+      <circle cx="74" cy="62" r="26" fill="#E9BC55" />
+      <path d="M0 150c90-18 260-18 400-4v104H0Z" fill="#F3EFE4" />
+      <ellipse cx="272" cy="150" rx="52" ry="9" fill="#B9DDE4" />
+      <path d="M0 176c110-16 260-12 400 0v74H0Z" fill="#FFFFFF" />
+      <ellipse cx="116" cy="178" rx="62" ry="11" fill="#A9D3DC" />
+      <path d="M0 208c130-14 270-10 400-2v44H0Z" fill="#F6F3EA" />
+      <ellipse cx="234" cy="210" rx="70" ry="11" fill="#9CCBD6" />
+      <ellipse cx="366" cy="218" rx="34" ry="7" fill="#B9DDE4" />
+      <path d="M0 236c140-12 270-10 400 0v14H0Z" fill="#FFFFFF" />
+    </svg>
+  )
+}
+
+{
+  name === "karadeniz" && (
+    <svg viewBox="0 0 400 250" class="h-full w-full" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <linearGradient id="kar-sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#FBF4E4" />
+          <stop offset="1" stop-color="#EFE6C8" />
+        </linearGradient>
+      </defs>
+      <rect width="400" height="250" fill="url(#kar-sky)" />
+      <circle cx="330" cy="58" r="24" fill="#E9BC55" opacity=".9" />
+      <path d="M0 186C60 148 150 128 230 138s120 34 170 28v84H0Z" fill="#7BA184" />
+      <path d="M0 170c60 8 130 10 210 2s130-10 190-2v16c-60 8-140 10-200 2s-140 8-200-2Z" fill="#FBF4E4" opacity=".55" />
+      <path d="M0 216c70-30 160-42 250-28s100 22 150 18v44H0Z" fill="#5E8A66" />
+      <g fill="#3E5F49">
+        <path d="M60 196l14-30 14 30Z" />
+        <path d="M60 212l14-30 14 30Z" />
+        <path d="M104 204l12-26 12 26Z" />
+        <path d="M104 218l12-26 12 26Z" />
+        <path d="M330 208l13-28 13 28Z" />
+        <path d="M330 222l13-28 13 28Z" />
+      </g>
+      <g>
+        <rect x="222" y="184" width="40" height="26" rx="2" fill="#F3E3BE" />
+        <path d="M215 186l27-20 27 20Z" fill="#A55E36" />
+        <rect x="238" y="196" width="9" height="14" fill="#6E5138" />
+      </g>
+      <path d="M0 238c100-10 220-10 400-2v14H0Z" fill="#477051" />
+    </svg>
+  )
+}
+
+{
+  name === "ege" && (
+    <svg viewBox="0 0 400 250" class="h-full w-full" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <linearGradient id="ege-sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#FBF4E4" />
+          <stop offset="1" stop-color="#F3E3BE" />
+        </linearGradient>
+      </defs>
+      <rect width="400" height="250" fill="url(#ege-sky)" />
+      <circle cx="322" cy="62" r="28" fill="#E9BC55" />
+      <g fill="none" stroke="#2A3760" stroke-width="2.5" stroke-linecap="round">
+        <path d="M84 92q7-7 14 0M108 82q7-7 14 0" />
+      </g>
+      <path d="M0 152c60-8 120-8 170-2s110 8 160 2 50-6 70-4v102H0Z" fill="#63A8B5" />
+      <path d="M0 196c70-8 150-8 210-2s130 8 190 2v54H0Z" fill="#3E8E9C" />
+      <g>
+        <rect x="203" y="106" width="3.5" height="66" fill="#2A3760" />
+        <path d="M200 112l-40 58h40Z" fill="#FFFFFF" />
+        <path d="M210 118l34 52h-34Z" fill="#C7A14B" />
+        <path d="M164 176c12 9 70 9 82 0l-9 16h-64Z" fill="#2A3760" />
+      </g>
+      <g stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity=".7">
+        <path d="M60 216h26M118 228h20M300 222h26M336 208h18" />
+      </g>
+    </svg>
+  )
+}

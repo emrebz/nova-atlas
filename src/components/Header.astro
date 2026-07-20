@@ -1,5 +1,6 @@
 ---
 import { useTranslations, asLocale, altLocale, localeHome } from "../i18n/utils";
+import ThemeToggle from "./ThemeToggle.astro";
 import Wordmark from "./Wordmark.astro";
 
 const locale = asLocale(Astro.currentLocale);
@@ -38,42 +39,49 @@ const navItems = [t.nav.home, t.nav.about, t.nav.services, t.nav.contact];
       </ul>
     </nav>
 
-    <nav aria-label={t.a11y.langNav} class="hidden md:block">
-      <div class="flex items-center gap-1 text-sm font-semibold">
-        <a
-          href={localeHome("tr")}
-          class="lang-link rounded-md px-2 py-2"
-          aria-current={locale === "tr" ? "page" : undefined}>TR</a
-        >
-        <span aria-hidden="true" class="opacity-40">|</span>
-        <a
-          href={localeHome("en")}
-          class="lang-link rounded-md px-2 py-2"
-          aria-current={locale === "en" ? "page" : undefined}>EN</a
-        >
-      </div>
-    </nav>
+    <div class="flex items-center gap-1">
+      <ThemeToggle
+        toDarkLabel={t.a11y.themeToDark}
+        toLightLabel={t.a11y.themeToLight}
+      />
 
-    <button
-      id="menu-open"
-      type="button"
-      class="grid h-11 w-11 place-items-center rounded-lg md:hidden"
-      aria-expanded="false"
-      aria-controls="mobile-menu"
-      aria-label={t.a11y.menuOpen}
-    >
-      <svg
-        viewBox="0 0 24 24"
-        class="h-6 w-6"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        aria-hidden="true"
+      <nav aria-label={t.a11y.langNav} class="hidden md:block">
+        <div class="flex items-center gap-1 text-sm font-semibold">
+          <a
+            href={localeHome("tr")}
+            class="lang-link rounded-md px-2 py-2"
+            aria-current={locale === "tr" ? "page" : undefined}>TR</a
+          >
+          <span aria-hidden="true" class="opacity-40">|</span>
+          <a
+            href={localeHome("en")}
+            class="lang-link rounded-md px-2 py-2"
+            aria-current={locale === "en" ? "page" : undefined}>EN</a
+          >
+        </div>
+      </nav>
+
+      <button
+        id="menu-open"
+        type="button"
+        class="grid h-11 w-11 place-items-center rounded-lg md:hidden"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label={t.a11y.menuOpen}
       >
-        <path d="M4 7h16M4 12h16M4 17h10"></path>
-      </svg>
-    </button>
+        <svg
+          viewBox="0 0 24 24"
+          class="h-6 w-6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M4 7h16M4 12h16M4 17h10"></path>
+        </svg>
+      </button>
+    </div>
   </div>
 
   <!-- Mobile full-screen menu -->
@@ -91,24 +99,30 @@ const navItems = [t.nav.home, t.nav.about, t.nav.services, t.nav.contact];
       <span style="--wm-sub: var(--brand-accent-soft)">
         <Wordmark suffix={t.brandSuffix} />
       </span>
-      <button
-        id="menu-close"
-        type="button"
-        class="grid h-11 w-11 place-items-center rounded-lg"
-        aria-label={t.a11y.menuClose}
-      >
-        <svg
-          viewBox="0 0 24 24"
-          class="h-6 w-6"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          aria-hidden="true"
+      <div class="flex items-center gap-1">
+        <ThemeToggle
+          toDarkLabel={t.a11y.themeToDark}
+          toLightLabel={t.a11y.themeToLight}
+        />
+        <button
+          id="menu-close"
+          type="button"
+          class="grid h-11 w-11 place-items-center rounded-lg"
+          aria-label={t.a11y.menuClose}
         >
-          <path d="M6 6l12 12M18 6L6 18"></path>
-        </svg>
-      </button>
+          <svg
+            viewBox="0 0 24 24"
+            class="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M6 6l12 12M18 6L6 18"></path>
+          </svg>
+        </button>
+      </div>
     </div>
 
     <nav
@@ -160,22 +174,35 @@ const navItems = [t.nav.home, t.nav.about, t.nav.services, t.nav.contact];
   #site-header {
     color: #fff;
     --wm-sub: var(--brand-accent-soft);
-    transition:
-      background-color 0.25s ease,
-      color 0.25s ease,
-      box-shadow 0.25s ease;
+    transition: color 0.25s ease;
   }
 
-  /* Scrolled: translucent light bar with blur + soft shadow → ink text */
-  #site-header[data-scrolled] {
-    color: var(--ink);
-    --wm-sub: var(--brand-accent-strong);
+  /* Scrolled bar background lives on a pseudo-element: backdrop-filter on the
+     header itself would turn it into the containing block for the fixed
+     mobile menu, clipping the menu (and its background) to the 72px bar. */
+  #site-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
     background: color-mix(in srgb, var(--surface) 86%, transparent);
     -webkit-backdrop-filter: blur(14px);
     backdrop-filter: blur(14px);
     box-shadow:
       0 1px 0 rgb(11 18 38 / 0.05),
       0 10px 30px rgb(11 18 38 / 0.08);
+    transition: opacity 0.25s ease;
+  }
+
+  /* Scrolled: translucent light bar → ink text */
+  #site-header[data-scrolled] {
+    color: var(--ink);
+    --wm-sub: var(--brand-accent-strong);
+  }
+
+  #site-header[data-scrolled]::before {
+    opacity: 1;
   }
 
   .nav-link::after {

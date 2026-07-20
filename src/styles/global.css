@@ -16,6 +16,8 @@
 
 /* ── Design tokens — palette derived from the NovaAtlas logo ───────────── */
 :root {
+  color-scheme: light;
+
   /* Brand — sampled from docs/logo/nova-atlas.png (navy wordmark, gold star) */
   --brand-primary: #131c33; /* deep midnight navy */
   --brand-primary-deep: #0b1226; /* star-sky, hero gradient end */
@@ -30,6 +32,7 @@
   --surface: #ffffff;
   --surface-2: #f7f6f2; /* warm off-white, matches logo background */
   --line: #e7e4dc; /* hairline borders */
+  --heading: var(--brand-primary);
 
   /* WhatsApp */
   --wa-green: #25d366; /* brand green — FAB background (icon only) */
@@ -49,6 +52,19 @@
   --header-h: 4.5rem;
 }
 
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ink: #edf1f7;
+  --muted: #abb5c6;
+  --surface: #0d1424;
+  --surface-2: #121b2e;
+  --line: #2a354a;
+  --heading: #f3eee3;
+  --brand-accent-strong: #dfc27d;
+  --wa-green-strong: #39c56b;
+  --wa-green-deep: #25a955;
+}
+
 /* ── Map tokens into Tailwind theme ────────────────────────────────────── */
 @theme inline {
   --color-primary: var(--brand-primary);
@@ -62,6 +78,7 @@
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
   --color-line: var(--line);
+  --color-heading: var(--heading);
   --color-wa: var(--wa-green);
   --color-wa-strong: var(--wa-green-strong);
   --color-wa-deep: var(--wa-green-deep);
@@ -84,6 +101,9 @@ body {
   text-rendering: optimizeLegibility;
   font-size: 1.0625rem; /* 17px body */
   line-height: 1.6;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 /* Anchored sections land below the sticky header */

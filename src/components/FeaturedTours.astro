@@ -1,0 +1,297 @@
+---
+import { site } from "../config/site";
+import { useTranslations, asLocale } from "../i18n/utils";
+import Icon from "./Icon.astro";
+import Reveal from "./Reveal.astro";
+import TourArt from "./TourArt.astro";
+
+const locale = asLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+
+const tourWa = (name: string) =>
+  `https://wa.me/${site.phoneRaw}?text=${encodeURIComponent(
+    t.tours.waTemplate.replace("{tour}", name)
+  )}`;
+---
+
+<section
+  id={t.tours.anchor}
+  data-tours-carousel
+  class="overflow-hidden bg-surface pt-10 pb-16 md:pt-14 md:pb-24"
+>
+  <div class="container-site">
+    <Reveal class="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
+      <h2
+        class="font-display max-w-md text-[clamp(1.7rem,3.5vw,2.4rem)] leading-tight font-bold tracking-tight text-heading"
+      >
+        {t.tours.h2}
+      </h2>
+      <div class="flex max-w-md flex-col items-start gap-4 md:items-end">
+        <p class="text-muted md:text-right">{t.tours.body}</p>
+        <div
+          class="flex items-center gap-2"
+          role="group"
+          aria-label={t.tours.carouselLabel}
+        >
+          <button
+            type="button"
+            data-tour-prev
+            aria-label={t.tours.previousLabel}
+            aria-controls="featured-tours-track"
+            class="tour-control inline-flex size-11 items-center justify-center rounded-full border border-line bg-surface text-heading shadow-sm transition hover:border-heading hover:bg-primary hover:text-white active:scale-95"
+          >
+            <Icon name="arrow-left" class="h-5 w-5" />
+          </button>
+          <button
+            type="button"
+            data-tour-next
+            aria-label={t.tours.nextLabel}
+            aria-controls="featured-tours-track"
+            class="tour-control inline-flex size-11 items-center justify-center rounded-full border border-line bg-surface text-heading shadow-sm transition hover:border-heading hover:bg-primary hover:text-white active:scale-95"
+          >
+            <Icon name="arrow-right" class="h-5 w-5" />
+          </button>
+        </div>
+      </div>
+    </Reveal>
+  </div>
+
+  {/* Auto-sliding showcase with native touch scrolling and previous/next
+      controls. Duplicate sets keep both directions seamless. */}
+  <Reveal delay={120}>
+    <div
+      class="tours-marquee mt-10"
+      data-tour-viewport
+      role="region"
+      aria-label={t.tours.carouselLabel}
+      tabindex="0"
+    >
+      <div id="featured-tours-track" class="tours-track">
+        {
+          [true, false, true].map((isDup) => (
+            <ul
+              class:list={["tours-set flex", isDup && "tours-dup"]}
+              aria-hidden={isDup ? "true" : undefined}
+            >
+              {t.tours.items.map((item) => (
+                <li class="tour-card group relative w-[272px] shrink-0 overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_6px_24px_rgb(11_18_38/0.06)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_18px_44px_rgb(11_18_38/0.12)] sm:w-[320px]">
+                  <div class="tour-art aspect-[8/5] overflow-hidden">
+                    <TourArt name={item.art} />
+                  </div>
+                  <span class="badge-soon absolute top-4 right-4 rounded-full px-3 py-1 text-xs font-semibold tracking-wide text-white">
+                    {t.tours.badge}
+                  </span>
+                  <div class="flex items-start justify-between gap-3 p-5">
+                    <div>
+                      <h3 class="font-display text-lg font-semibold tracking-tight text-ink">
+                        {item.name}
+                      </h3>
+                      <p class="mt-1 text-sm text-muted">{item.desc}</p>
+                    </div>
+                    <a
+                      href={tourWa(item.name)}
+                      target="_blank"
+                      rel="noopener"
+                      tabindex={isDup ? -1 : undefined}
+                      class="mt-0.5 inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full border border-line px-4 text-sm font-semibold text-wa-strong transition-colors hover:border-wa-strong hover:bg-wa-strong hover:text-white"
+                    >
+                      <Icon name="whatsapp" class="h-4 w-4" />
+                      {t.tours.waCta}
+                    </a>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ))
+        }
+      </div>
+    </div>
+  </Reveal>
+</section>
+
+<style>
+  .tours-marquee {
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+    touch-action: pan-x pan-y;
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 5%,
+      #000 95%,
+      transparent
+    );
+    mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  }
+
+  .tours-marquee::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tours-track {
+    display: flex;
+    width: max-content;
+  }
+
+  /* Trailing padding (not flex gap) so each set's width equals one exact
+     animation period — the -50% loop is seamless. */
+  .tours-set {
+    gap: 1.25rem;
+    padding-inline: 0.625rem;
+  }
+
+  .tour-art :global(svg) {
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .tour-card:hover .tour-art :global(svg) {
+    transform: scale(1.06);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tours-dup {
+      display: none;
+    }
+    .tours-marquee {
+      overflow-x: auto;
+      -webkit-mask-image: none;
+      mask-image: none;
+      scroll-snap-type: x mandatory;
+      padding-inline: var(--container-pad);
+    }
+    .tour-card {
+      scroll-snap-align: start;
+    }
+  }
+</style>
+
+<script>
+  const setupTourCarousel = (root: HTMLElement) => {
+    if (root.dataset.carouselReady === "true") return;
+
+    const viewport = root.querySelector<HTMLElement>("[data-tour-viewport]");
+    const primarySet = root.querySelector<HTMLElement>(".tours-set:not(.tours-dup)");
+    const previous = root.querySelector<HTMLButtonElement>("[data-tour-prev]");
+    const next = root.querySelector<HTMLButtonElement>("[data-tour-next]");
+
+    if (!viewport || !primarySet || !previous || !next) return;
+    root.dataset.carouselReady = "true";
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let setWidth = 0;
+    let cardStep = 0;
+    let isHovering = false;
+    let isPointerDown = false;
+    let hasFocus = false;
+    let pauseUntil = 0;
+    let previousFrame = performance.now();
+    let normalizeTimer = 0;
+
+    const jumpTo = (left: number) => {
+      const behavior = viewport.style.scrollBehavior;
+      viewport.style.scrollBehavior = "auto";
+      viewport.scrollLeft = left;
+      viewport.style.scrollBehavior = behavior;
+    };
+
+    const measure = (preservePosition = false) => {
+      const oldWidth = setWidth;
+      const oldLeft = viewport.scrollLeft;
+      setWidth = primarySet.getBoundingClientRect().width;
+
+      const cards = primarySet.querySelectorAll<HTMLElement>(".tour-card");
+      if (cards.length > 1) {
+        cardStep = cards[1].offsetLeft - cards[0].offsetLeft;
+      } else if (cards.length === 1) {
+        cardStep = cards[0].offsetWidth + 20;
+      }
+
+      if (reduceMotion.matches) {
+        jumpTo(0);
+      } else if (preservePosition && oldWidth > 0) {
+        jumpTo(setWidth + ((oldLeft % oldWidth) / oldWidth) * setWidth);
+      } else {
+        jumpTo(setWidth);
+      }
+    };
+
+    const normalizePosition = () => {
+      if (reduceMotion.matches || setWidth === 0) return;
+
+      if (viewport.scrollLeft > setWidth * 1.9) {
+        jumpTo(viewport.scrollLeft - setWidth);
+      } else if (viewport.scrollLeft < setWidth * 0.1) {
+        jumpTo(viewport.scrollLeft + setWidth);
+      }
+    };
+
+    const moveByCard = (direction: -1 | 1) => {
+      pauseUntil = performance.now() + 4000;
+      viewport.scrollBy({
+        left: direction * cardStep,
+        behavior: reduceMotion.matches ? "auto" : "smooth",
+      });
+    };
+
+    previous.addEventListener("click", () => moveByCard(-1));
+    next.addEventListener("click", () => moveByCard(1));
+
+    viewport.addEventListener("keydown", (event) => {
+      if (event.target !== viewport) return;
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        moveByCard(-1);
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        moveByCard(1);
+      }
+    });
+
+    viewport.addEventListener("mouseenter", () => (isHovering = true));
+    viewport.addEventListener("mouseleave", () => (isHovering = false));
+    viewport.addEventListener("pointerdown", () => (isPointerDown = true));
+    viewport.addEventListener("pointerup", () => {
+      isPointerDown = false;
+      pauseUntil = performance.now() + 4000;
+    });
+    viewport.addEventListener("pointercancel", () => (isPointerDown = false));
+    root.addEventListener("focusin", () => (hasFocus = true));
+    root.addEventListener("focusout", (event) => {
+      hasFocus = root.contains(event.relatedTarget as Node);
+    });
+    viewport.addEventListener("scroll", () => {
+      window.clearTimeout(normalizeTimer);
+      normalizeTimer = window.setTimeout(normalizePosition, 140);
+    });
+
+    const animate = (time: number) => {
+      const elapsed = Math.min(time - previousFrame, 50);
+      previousFrame = time;
+
+      if (
+        !reduceMotion.matches &&
+        !document.hidden &&
+        !isHovering &&
+        !isPointerDown &&
+        !hasFocus &&
+        time > pauseUntil &&
+        setWidth > 0
+      ) {
+        viewport.scrollLeft += (setWidth / 42000) * elapsed;
+        normalizePosition();
+      }
+
+      window.requestAnimationFrame(animate);
+    };
+
+    const resizeObserver = new ResizeObserver(() => measure(true));
+    resizeObserver.observe(primarySet);
+    reduceMotion.addEventListener("change", () => measure(false));
+    measure(false);
+    window.requestAnimationFrame(animate);
+  };
+
+  document.querySelectorAll<HTMLElement>("[data-tours-carousel]").forEach(setupTourCarousel);
+</script>

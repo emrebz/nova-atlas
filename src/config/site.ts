@@ -3,8 +3,9 @@
  * Update here — every component reads from this file.
  */
 export const site = {
-  brand: "NovaAtlas Travel",
-  brandTR: "NovaAtlas Turizm",
+  brand: "Nova Atlas Turizm",
+  brandTR: "Nova Atlas Turizm",
+  alternateNames: ["NovaAtlas Turizm", "NovaAtlas", "novaatlastur.com"],
   domain: "novaatlastur.com",
   url: "https://novaatlastur.com",
   phoneDisplay: "+90 533 266 11 26",
@@ -17,10 +18,13 @@ export const site = {
   /** Schema.org openingHours format */
   openingHours: "Mo-Fr 09:00-18:00",
   /** Social links — footer icons render ONLY when this object is non-empty. */
-  social: {} as Record<string, string>,
+  social: {
+    instagram: "https://www.instagram.com/novaatlasturizm",
+    facebook: "https://www.facebook.com/novaatlasturizm",
+  } as Record<string, string>,
   waMessage: {
-    tr: "Merhaba, NovaAtlas hakkında bilgi almak istiyorum.",
-    en: "Hello, I'd like to get information about NovaAtlas.",
+    tr: "Merhaba, Nova Atlas Turizm hakkında bilgi almak istiyorum.",
+    en: "Hello, I'd like to get information about Nova Atlas Travel.",
   },
 } as const;
 

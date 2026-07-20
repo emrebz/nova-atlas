@@ -7,6 +7,10 @@ const locale = asLocale(Astro.currentLocale);
 const t = useTranslations(locale);
 const year = new Date().getFullYear();
 const socialEntries = Object.entries(site.social);
+const socialLabels: Record<string, string> = {
+  instagram: "Instagram",
+  facebook: "Facebook",
+};
 ---
 
 <footer
@@ -43,12 +47,6 @@ const socialEntries = Object.entries(site.social);
     </div>
 
     {
-      /*
-        Social icons render only when site.social has entries (src/config/site.ts).
-        Add e.g. { instagram: "https://instagram.com/novaatlas" } to enable.
-      */
-    }
-    {
       socialEntries.length > 0 && (
         <ul class="mt-8 flex gap-4">
           {socialEntries.map(([name, url]) => (
@@ -57,26 +55,15 @@ const socialEntries = Object.entries(site.social);
                 href={url}
                 target="_blank"
                 rel="noopener"
+                aria-label={socialLabels[name] ?? name}
                 class="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-sm font-semibold uppercase hover:border-accent-soft hover:text-accent-soft"
               >
-                {name.slice(0, 2)}
+                {name === "instagram" ? "IG" : name === "facebook" ? "FB" : name.slice(0, 2)}
               </a>
             </li>
           ))}
         </ul>
       )
-    }
-
-    {
-      /*
-        TÜRSAB: once the agency licence is granted, add the certificate badge
-        here (trust signal competitors lead with), e.g.
-        <div class="mt-8 flex items-center gap-3 text-sm">
-          <img src="/tursab-badge.svg" alt="TÜRSAB" width="36" height="36" />
-          TÜRSAB Belge No: XXXXX
-        </div>
-        (Matching placeholder lives in About.astro.)
-      */
     }
 
     <p class="mt-10 border-t border-white/10 pt-6 text-sm text-white/50">

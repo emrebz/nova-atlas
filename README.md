@@ -43,6 +43,7 @@ npm run preview    # serve dist/ locally
 | All English copy | `src/i18n/en.ts` (type-checked against the TR keys) |
 | Colors / design tokens | `src/styles/global.css` (`:root` custom properties) |
 | Logo shown in About | `src/assets/logo.png` (optimized at build time) |
+| Mock tour routes (sliding cards) | `tours.items` in `src/i18n/tr.ts` / `en.ts`; illustrations in `src/components/TourArt.astro` |
 | Favicon / OG image | `public/favicon.svg`, `public/og-image.jpg` |
 
 Never hardcode visible copy in components — every string comes from
