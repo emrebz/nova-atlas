@@ -1,0 +1,44 @@
+---
+import RoutesIndex from "../../../components/RoutesIndex.astro";
+import { site } from "../../../config/site";
+import { tours, tourPath } from "../../../data/tours";
+import { useTranslations } from "../../../i18n/utils";
+import Base from "../../../layouts/Base.astro";
+
+const locale = "en" as const;
+const t = useTranslations(locale);
+const page = t.routesPage;
+const alternates = { tr: "/rotalar/", en: "/en/routes/" };
+const pageUrl = new URL(alternates.en, site.url).href;
+
+const breadcrumb = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: t.nav.home.label, item: `${site.url}/en/` },
+    { "@type": "ListItem", position: 2, name: page.breadcrumb, item: pageUrl },
+  ],
+};
+
+const itemList = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: page.h1,
+  numberOfItems: tours.length,
+  itemListElement: tours.map((tour, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: tour.en.name,
+    url: new URL(tourPath(tour, locale), site.url).href,
+  })),
+};
+---
+
+<Base
+  title={page.meta.title}
+  description={page.meta.description}
+  alternates={alternates}
+  extraSchema={[breadcrumb, itemList]}
+>
+  <RoutesIndex />
+</Base>

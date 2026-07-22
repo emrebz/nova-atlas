@@ -1,0 +1,55 @@
+---
+import VipTransferPage from "../../../components/VipTransferPage.astro";
+import { site } from "../../../config/site";
+import { useTranslations } from "../../../i18n/utils";
+import Base from "../../../layouts/Base.astro";
+
+const locale = "en" as const;
+const t = useTranslations(locale);
+const v = t.vip;
+const alternates = { tr: "/vip-tasimacilik/", en: "/en/vip-transfer/" };
+const pageUrl = new URL(alternates.en, site.url).href;
+
+const breadcrumb = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: t.nav.home.label,
+      item: `${site.url}/en/`,
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: v.breadcrumb,
+      item: pageUrl,
+    },
+  ],
+};
+
+const service = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Nova Atlas Travel VIP Transfer",
+  description: v.meta.description,
+  url: pageUrl,
+  serviceType: ["VIP transfer", "Airport transfer", "Special-event transport"],
+  provider: { "@id": `${site.url}/#organization` },
+  areaServed: [
+    { "@type": "City", name: "Çorlu" },
+    { "@type": "Airport", name: "Istanbul Airport", iataCode: "IST" },
+    { "@type": "Airport", name: "Sabiha Gökçen Airport", iataCode: "SAW" },
+  ],
+};
+---
+
+<Base
+  title={v.meta.title}
+  description={v.meta.description}
+  alternates={alternates}
+  extraSchema={[breadcrumb, service]}
+>
+  <VipTransferPage />
+</Base>

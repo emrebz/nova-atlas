@@ -1,0 +1,223 @@
+---
+import { Image } from "astro:assets";
+import { site, waUrl } from "../config/site";
+import { tourByArt, tourPath } from "../data/tours";
+import { tourImages } from "../data/tourImages";
+import { asLocale, localeHome, useTranslations } from "../i18n/utils";
+import routesHero from "../assets/routes/routes-hero.png";
+import Icon from "./Icon.astro";
+import Reveal from "./Reveal.astro";
+
+const locale = asLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+const page = t.routesPage;
+const home = localeHome(locale);
+
+const routeCards = t.tours.items.flatMap((item) => {
+  const tour = tourByArt(item.art);
+  return tour
+    ? [{ item, tour, content: locale === "tr" ? tour.tr : tour.en }]
+    : [];
+});
+
+const routeWa = (message: string) =>
+  `https://wa.me/${site.phoneRaw}?text=${encodeURIComponent(message)}`;
+---
+
+<article>
+  <header class="routes-hero relative isolate overflow-hidden bg-primary-deep text-white">
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+      <Image
+        src={routesHero}
+        alt=""
+        widths={[640, 960, 1280, 1600, 1920]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        class="h-full w-full object-cover object-center"
+      />
+    </div>
+    <div class="routes-hero-scrim pointer-events-none absolute inset-0" aria-hidden="true"></div>
+    <div
+      class="container-site relative flex min-h-[64svh] flex-col justify-center pt-[calc(var(--header-h)+3rem)] pb-16 md:min-h-[68svh] md:pb-20"
+    >
+      <div class="max-w-3xl">
+        <nav aria-label="Breadcrumb" class="mb-6 text-sm font-medium text-white/70">
+          <ol class="flex items-center gap-2">
+            <li>
+              <a href={home} class="rounded transition hover:text-accent-soft">
+                {t.nav.home.label}
+              </a>
+            </li>
+            <li aria-hidden="true" class="text-white/35">/</li>
+            <li aria-current="page" class="text-white">{page.breadcrumb}</li>
+          </ol>
+        </nav>
+
+        <p class="inline-flex items-center gap-2 text-sm font-semibold tracking-[0.14em] text-accent-soft uppercase">
+          <Icon name="compass" class="h-4.5 w-4.5" />
+          {page.eyebrow}
+        </p>
+        <h1
+          class="font-display mt-4 max-w-3xl text-[clamp(2.5rem,6vw,4.75rem)] leading-[0.98] font-bold tracking-[-0.035em]"
+        >
+          {page.h1}
+        </h1>
+        <p class="mt-5 max-w-2xl text-lg leading-relaxed text-white/75 md:text-xl">
+          {page.lead}
+        </p>
+        <span class="mt-7 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-4 py-2 text-sm font-semibold text-white/90">
+          <Icon name="route" class="h-4 w-4 text-accent-soft" />
+          {routeCards.length} {page.countSuffix}
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <section class="bg-surface py-16 md:py-24" aria-labelledby="route-grid-title">
+    <div class="container-site">
+      <Reveal>
+        <div class="flex flex-col justify-between gap-5 border-b border-line pb-8 md:flex-row md:items-end">
+          <div>
+            <p class="text-sm font-semibold tracking-[0.14em] text-accent-strong uppercase">
+              {page.breadcrumb}
+            </p>
+            <h2
+              id="route-grid-title"
+              class="font-display mt-2 text-3xl font-bold tracking-tight text-heading md:text-4xl"
+            >
+              {t.tours.h2}
+            </h2>
+          </div>
+          <p class="max-w-xl text-sm leading-relaxed text-muted md:text-right">
+            {page.notice}
+          </p>
+        </div>
+      </Reveal>
+
+      <ul class="mt-10 grid gap-6 md:grid-cols-2">
+        {
+          routeCards.map(({ item, tour, content }, index) => (
+            <Reveal as="li" delay={(index % 2) * 90} class="h-full">
+              <article class="route-card group relative flex h-full flex-col overflow-hidden rounded-3xl border border-line bg-surface-2 shadow-[0_10px_32px_rgb(11_18_38/0.07)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_48px_rgb(11_18_38/0.13)]">
+                <a
+                  href={tourPath(tour, locale)}
+                  aria-label={`${page.cardCta} — ${content.name}`}
+                  class="absolute inset-0 z-10 rounded-3xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-strong"
+                ></a>
+                <div class="route-photo relative aspect-[8/5] overflow-hidden">
+                  <Image
+                    src={tourImages[item.art]}
+                    alt={content.name}
+                    widths={[640, 960]}
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                    loading="lazy"
+                    class="h-full w-full object-cover"
+                  />
+                  <span class="badge-soon absolute top-4 right-4 rounded-full px-3 py-1 text-xs font-semibold tracking-wide text-white">
+                    {t.tours.badge}
+                  </span>
+                </div>
+
+                <div class="flex flex-1 flex-col p-6 sm:p-7">
+                  <div class="flex flex-wrap gap-2 text-xs font-medium">
+                    <span class="inline-flex items-center gap-1.5 rounded-full bg-primary/7 px-3 py-1.5 text-ink">
+                      <Icon name="pin" class="h-3.5 w-3.5 text-accent-strong" />
+                      {content.region}
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 rounded-full bg-primary/7 px-3 py-1.5 text-ink">
+                      <Icon name="calendar" class="h-3.5 w-3.5 text-accent-strong" />
+                      {content.duration}
+                    </span>
+                  </div>
+
+                  <h2 class="font-display mt-5 text-2xl font-bold tracking-tight text-heading md:text-3xl">
+                    {content.name}
+                  </h2>
+                  <p class="mt-3 flex-1 leading-relaxed text-muted">{content.tagline}</p>
+
+                  <div class="mt-7 flex flex-wrap items-center gap-3">
+                    <a
+                      href={tourPath(tour, locale)}
+                      class="relative z-20 inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary-soft"
+                    >
+                      {page.cardCta}
+                      <Icon name="arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                    </a>
+                    <a
+                      href={routeWa(item.waMessage)}
+                      target="_blank"
+                      rel="noopener"
+                      aria-label={`${page.waCta} — ${content.name}`}
+                      class="relative z-20 inline-flex min-h-12 items-center gap-2 rounded-full border border-wa-strong px-5 py-3 text-sm font-semibold text-wa-strong transition hover:bg-wa-strong hover:text-white"
+                    >
+                      <Icon name="whatsapp" class="h-4.5 w-4.5" />
+                      {page.waCta}
+                    </a>
+                  </div>
+                </div>
+              </article>
+            </Reveal>
+          ))
+        }
+      </ul>
+
+      <Reveal>
+        <div class="mt-14 flex flex-col items-start justify-between gap-7 rounded-[2rem] bg-primary p-7 text-white md:p-10 lg:flex-row lg:items-center">
+          <div class="max-w-2xl">
+            <h2 class="font-display text-2xl font-bold tracking-tight md:text-3xl">
+              {page.ctaTitle}
+            </h2>
+            <p class="mt-3 leading-relaxed text-white/70">{page.ctaBody}</p>
+          </div>
+          <a
+            href={waUrl(locale)}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex min-h-13 shrink-0 items-center gap-2.5 rounded-full bg-wa-strong px-7 py-3.5 font-semibold text-white transition hover:bg-wa-deep"
+          >
+            <Icon name="whatsapp" class="h-5 w-5" />
+            {page.cta}
+          </a>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+</article>
+
+<style>
+  .routes-hero-scrim {
+    background:
+      linear-gradient(
+        90deg,
+        rgb(5 10 24 / 0.9) 0%,
+        rgb(5 10 24 / 0.72) 44%,
+        rgb(5 10 24 / 0.28) 78%,
+        rgb(5 10 24 / 0.36) 100%
+      ),
+      linear-gradient(180deg, rgb(5 10 24 / 0.34) 0%, transparent 35%, rgb(5 10 24 / 0.6) 100%);
+  }
+
+  @media (max-width: 640px) {
+    .routes-hero :global(img) {
+      object-position: 64% center;
+    }
+
+    .routes-hero-scrim {
+      background: linear-gradient(
+        180deg,
+        rgb(5 10 24 / 0.52) 0%,
+        rgb(5 10 24 / 0.72) 42%,
+        rgb(5 10 24 / 0.9) 100%
+      );
+    }
+  }
+
+  .route-photo :global(img) {
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .route-card:hover .route-photo :global(img) {
+    transform: scale(1.045);
+  }
+</style>

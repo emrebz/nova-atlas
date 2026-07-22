@@ -3,11 +3,33 @@ import { useTranslations, asLocale, altLocale, localeHome } from "../i18n/utils"
 import ThemeToggle from "./ThemeToggle.astro";
 import Wordmark from "./Wordmark.astro";
 
+interface Props {
+  /** Reciprocal locale paths for the current page (language switch). */
+  alternates?: { tr: string; en: string };
+}
+
+const { alternates = { tr: "/", en: "/en/" } } = Astro.props;
+
 const locale = asLocale(Astro.currentLocale);
 const t = useTranslations(locale);
 const other = altLocale(locale);
 
-const navItems = [t.nav.home, t.nav.about, t.nav.services, t.nav.contact];
+// Prefix section anchors with the home path so the nav works from every page
+// (e.g. tour detail pages), not just the homepage.
+const home = localeHome(locale);
+const vipPath = locale === "tr" ? "/vip-tasimacilik/" : "/en/vip-transfer/";
+const navItems = [
+  { label: t.nav.home.label, href: `${home}#${t.nav.home.anchor}` },
+  { label: t.nav.about.label, href: `${home}#${t.nav.about.anchor}` },
+  { label: t.nav.routes.label, href: `${home}#${t.nav.routes.anchor}` },
+  { label: t.nav.services.label, href: `${home}#${t.nav.services.anchor}` },
+  {
+    label: t.nav.vip.label,
+    href: vipPath,
+    current: Astro.url.pathname === vipPath,
+  },
+  { label: t.nav.contact.label, href: `${home}#${t.nav.contact.anchor}` },
+];
 ---
 
 <header id="site-header" class="fixed inset-x-0 top-0 z-50">
@@ -22,14 +44,15 @@ const navItems = [t.nav.home, t.nav.about, t.nav.services, t.nav.contact];
       <Wordmark suffix={t.brandSuffix} />
     </a>
 
-    <nav aria-label={t.a11y.mainNav} class="hidden md:block">
-      <ul class="flex items-center gap-8">
+    <nav aria-label={t.a11y.mainNav} class="hidden xl:block">
+      <ul class="flex items-center gap-6 xl:gap-7">
         {
           navItems.map((item) => (
             <li>
               <a
-                href={`#${item.anchor}`}
+                href={item.href}
                 class="nav-link relative py-2 text-[0.95rem] font-medium"
+                aria-current={item.current ? "page" : undefined}
               >
                 {item.label}
               </a>
@@ -48,13 +71,13 @@ const navItems = [t.nav.home, t.nav.about, t.nav.services, t.nav.contact];
       <nav aria-label={t.a11y.langNav} class="hidden md:block">
         <div class="flex items-center gap-1 text-sm font-semibold">
           <a
-            href={localeHome("tr")}
+            href={alternates.tr}
             class="lang-link rounded-md px-2 py-2"
             aria-current={locale === "tr" ? "page" : undefined}>TR</a
           >
           <span aria-hidden="true" class="opacity-40">|</span>
           <a
-            href={localeHome("en")}
+            href={alternates.en}
             class="lang-link rounded-md px-2 py-2"
             aria-current={locale === "en" ? "page" : undefined}>EN</a
           >
@@ -64,7 +87,7 @@ const navItems = [t.nav.home, t.nav.about, t.nav.services, t.nav.contact];
       <button
         id="menu-open"
         type="button"
-        class="grid h-11 w-11 place-items-center rounded-lg md:hidden"
+        class="grid h-11 w-11 place-items-center rounded-lg xl:hidden"
         aria-expanded="false"
         aria-controls="mobile-menu"
         aria-label={t.a11y.menuOpen}
@@ -91,7 +114,7 @@ const navItems = [t.nav.home, t.nav.about, t.nav.services, t.nav.contact];
     role="dialog"
     aria-modal="true"
     aria-label={t.a11y.mainNav}
-    class="fixed inset-0 z-50 flex flex-col bg-primary-deep text-white md:hidden"
+    class="fixed inset-0 z-50 flex flex-col bg-primary-deep text-white xl:hidden"
   >
     <div
       class="container-site flex h-(--header-h) w-full shrink-0 items-center justify-between"
@@ -134,8 +157,9 @@ const navItems = [t.nav.home, t.nav.about, t.nav.services, t.nav.contact];
           navItems.map((item, i) => (
             <li>
               <a
-                href={`#${item.anchor}`}
-                class="font-display block rounded-lg py-3 text-3xl font-semibold tracking-tight hover:text-accent-soft"
+                href={item.href}
+                class="mobile-nav-link font-display block rounded-lg py-3 text-3xl font-semibold tracking-tight hover:text-accent-soft"
+                aria-current={item.current ? "page" : undefined}
               >
                 <span class="mr-3 text-sm font-normal text-accent-soft tabular-nums">
                   0{i + 1}
@@ -152,14 +176,14 @@ const navItems = [t.nav.home, t.nav.about, t.nav.services, t.nav.contact];
         aria-label={t.a11y.langNav}
       >
         <a
-          href={localeHome("tr")}
+          href={alternates.tr}
           class="rounded-md px-3 py-2"
           class:list={[locale === "tr" ? "text-accent-soft underline underline-offset-8" : "text-white/80"]}
           aria-current={locale === "tr" ? "page" : undefined}>TR</a
         >
         <span aria-hidden="true" class="text-white/30">|</span>
         <a
-          href={localeHome("en")}
+          href={alternates.en}
           class="rounded-md px-3 py-2"
           class:list={[locale === "en" ? "text-accent-soft underline underline-offset-8" : "text-white/80"]}
           aria-current={locale === "en" ? "page" : undefined}>EN</a
@@ -219,8 +243,13 @@ const navItems = [t.nav.home, t.nav.about, t.nav.services, t.nav.contact];
   }
 
   .nav-link:hover::after,
-  .nav-link:focus-visible::after {
+  .nav-link:focus-visible::after,
+  .nav-link[aria-current="page"]::after {
     transform: scaleX(1);
+  }
+
+  .mobile-nav-link[aria-current="page"] {
+    color: var(--brand-accent-soft);
   }
 
   .lang-link[aria-current="page"] {

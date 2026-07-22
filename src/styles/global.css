@@ -61,8 +61,12 @@
   --line: #2a354a;
   --heading: #f3eee3;
   --brand-accent-strong: #dfc27d;
-  --wa-green-strong: #39c56b;
-  --wa-green-deep: #25a955;
+  /* Text CTAs keep white text: this green must stay AA (≥4.5:1) with #fff.
+     #15803d = 5.0:1, and still reads clearly against the dark navy surface.
+     (The pure brand green #25D366 lives on the icon-only FAB, where the
+     text-contrast rule doesn't apply.) */
+  --wa-green-strong: #15803d;
+  --wa-green-deep: #116632;
 }
 
 /* ── Map tokens into Tailwind theme ────────────────────────────────────── */

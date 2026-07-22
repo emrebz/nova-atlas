@@ -15,7 +15,9 @@ export const tr = {
   nav: {
     home: { label: "Ana Sayfa", anchor: "anasayfa" },
     about: { label: "Hakkımızda", anchor: "hakkimizda" },
+    routes: { label: "Rotalar", anchor: "rotalar" },
     services: { label: "Hizmetler", anchor: "hizmetler" },
+    vip: { label: "VIP Taşımacılık" },
     contact: { label: "İletişim", anchor: "iletisim" },
   },
   hero: {
@@ -47,16 +49,79 @@ export const tr = {
     body: "Hazırladığımız Çorlu çıkışlı yurt içi tur programlarından örnek rotalar. Tarihler, hareket noktaları ve program detayları duyurulduğunda burada paylaşılacak.",
     badge: "Yakında",
     waCta: "Bilgi Al",
-    waTemplate: "Merhaba, {tour} rotası hakkında bilgi almak istiyorum.",
     carouselLabel: "Öne çıkan tur rotaları",
     previousLabel: "Önceki rotayı göster",
     nextLabel: "Sonraki rotayı göster",
+    cardCta: "Rotayı incele",
+    allRoutesCta: "Tüm Rotaları Gör",
     items: [
-      { art: "kapadokya", name: "Kapadokya", desc: "Peribacaları ve gün doğumunda balon manzaraları" },
-      { art: "pamukkale", name: "Pamukkale", desc: "Bembeyaz travertenler ve antik Hierapolis" },
-      { art: "karadeniz", name: "Karadeniz Yaylaları", desc: "Sisli yaylalar, yemyeşil doğa" },
-      { art: "ege", name: "Ege Kıyıları", desc: "Masmavi koylar ve Ege esintisi" },
+      {
+        art: "kapadokya",
+        name: "Kapadokya",
+        desc: "Peribacaları ve gün doğumunda balon manzaraları",
+        waMessage: "Merhaba, Çorlu çıkışlı Kapadokya turu için planlanan tarihleri, konaklama seçeneklerini, balon turu bilgisini ve fiyat detaylarını öğrenmek istiyorum.",
+      },
+      {
+        art: "pamukkale",
+        name: "Pamukkale",
+        desc: "Bembeyaz travertenler ve antik Hierapolis",
+        waMessage: "Merhaba, Çorlu çıkışlı Pamukkale turu için planlanan tarihleri, Hierapolis programını, ulaşım ve fiyat detaylarını öğrenmek istiyorum.",
+      },
+      {
+        art: "karadeniz",
+        name: "Karadeniz Yaylaları",
+        desc: "Sisli yaylalar, yemyeşil doğa",
+        waMessage: "Merhaba, Çorlu çıkışlı Karadeniz Yaylaları turu için planlanan tarihleri, yayla rotasını, konaklama ve fiyat detaylarını öğrenmek istiyorum.",
+      },
+      {
+        art: "ege",
+        name: "Ege Kıyıları",
+        desc: "Masmavi koylar ve Ege esintisi",
+        waMessage: "Merhaba, Çorlu çıkışlı Ege Kıyıları turu için planlanan tarihleri, ziyaret edilecek koyları, konaklama ve fiyat detaylarını öğrenmek istiyorum.",
+      },
     ],
+    detail: {
+      metaTitleSuffix: "Çorlu Çıkışlı Tur Rotası",
+      breadcrumbTours: "Rotalar",
+      back: "Tüm rotalara dön",
+      overview: "Genel Bakış",
+      highlights: "Öne Çıkanlar",
+      itinerary: "Örnek Program",
+      included: "Programa Dahil Olabilecekler",
+      goodToKnow: "Bilmekte Fayda Var",
+      facts: "Kısa Bilgi",
+      regionLabel: "Bölge",
+      durationLabel: "Süre",
+      seasonLabel: "En İyi Zaman",
+      ctaTitle: "Bu rota ilgini çekti mi?",
+      ctaBody:
+        "Kesin tarihler ve fiyat detayları hazırlanıyor. WhatsApp'tan yazın, ihtiyacınıza göre size özel bir plan çıkaralım.",
+      cta: "WhatsApp'tan Bilgi Al",
+      soonNote:
+        "Bu bir örnek programdır; kesin tarihler, hareket noktaları ve içerik netleştiğinde güncellenecektir.",
+      otherTours: "Diğer Rotalar",
+    },
+  },
+  routesPage: {
+    meta: {
+      title: "Çorlu Çıkışlı Tur Rotaları | Nova Atlas Turizm",
+      description:
+        "Nova Atlas Turizm'in Çorlu çıkışlı Kapadokya, Pamukkale, Karadeniz Yaylaları ve Ege Kıyıları örnek tur rotalarını keşfedin.",
+    },
+    breadcrumb: "Rotalar",
+    eyebrow: "Çorlu çıkışlı örnek tur programları",
+    h1: "Tüm Rotaları Keşfedin",
+    lead:
+      "Hazırladığımız yurt içi rota örneklerini karşılaştırın; öne çıkan durakları ve program detaylarını inceleyerek ilgilendiğiniz rota için bize ulaşın.",
+    countSuffix: "örnek rota",
+    notice:
+      "Programlar örnektir; kesin tarihler, hareket noktaları, içerik ve fiyat bilgileri netleştiğinde güncellenecektir.",
+    cardCta: "Rotayı İncele",
+    waCta: "Bu rota için bilgi al",
+    ctaTitle: "Aklınızda başka bir rota mı var?",
+    ctaBody:
+      "Planlamak istediğiniz destinasyonu ve tercih ettiğiniz tarih aralığını WhatsApp üzerinden bize iletin.",
+    cta: "WhatsApp'tan Rota Sor",
   },
   services: {
     h2: "Çorlu Merkezli Seyahat ve Ulaşım Hizmetleri",
@@ -73,6 +138,104 @@ export const tr = {
       { icon: "van", title: "Taşımacılık & VIP Transfer", desc: "Personel taşımacılığı deneyimine dayanan ulaşım çözümleri." },
     ],
     cta: "WhatsApp'tan Yazın",
+  },
+  vip: {
+    meta: {
+      title: "Çorlu VIP Transfer | Nova Atlas Turizm",
+      description:
+        "Nova Atlas Turizm ile Vito ve A5 araç seçenekleriyle Çorlu–İstanbul Havalimanı, Çorlu–Sabiha Gökçen, özel rota, düğün ve özel gün transferleri.",
+    },
+    breadcrumb: "VIP Taşımacılık",
+    eyebrow: "Çorlu çıkışlı özel ulaşım",
+    h1: "VIP Transferinizi Rotanıza Göre Planlayalım",
+    lead:
+      "Vito ve A5 araç seçeneklerimizle havalimanı yolculukları, özel rotalar, düğünler ve özel günler için ulaşım talebinizi birlikte planlıyoruz.",
+    heroCta: "VIP Transfer Talebi Oluştur",
+    heroAlt: "VIP transfer için Vito ve A5 araç seçenekleri",
+    chips: ["Vito", "A5", "Çorlu çıkışlı planlama"],
+    servicesTitle: "İhtiyacınıza Uygun VIP Taşımacılık",
+    servicesBody:
+      "Tarih, saat, kalkış ve varış noktanızı WhatsApp üzerinden iletin; rota ve araç tercihinizi talebinize göre netleştirelim.",
+    services: [
+      {
+        icon: "plane",
+        title: "Çorlu – İstanbul Havalimanı",
+        desc: "Çorlu'dan İstanbul Havalimanı'na veya havalimanından Çorlu'ya özel transfer talebinizi planlayın.",
+        cta: "Bu rota için yaz",
+        message:
+          "Merhaba, Çorlu – İstanbul Havalimanı VIP transferi hakkında bilgi almak istiyorum. Tarih/saat: …, kalkış noktası: …, yolcu ve bagaj sayısı: …, tek yön/dönüş: …",
+      },
+      {
+        icon: "plane",
+        title: "Çorlu – Sabiha Gökçen",
+        desc: "Çorlu ile Sabiha Gökçen arasındaki özel transfer talebinizi tarih ve uçuş planınıza göre iletin.",
+        cta: "Bu rota için yaz",
+        message:
+          "Merhaba, Çorlu – Sabiha Gökçen VIP transferi hakkında bilgi almak istiyorum. Tarih/saat: …, kalkış noktası: …, yolcu ve bagaj sayısı: …, tek yön/dönüş: …",
+      },
+      {
+        icon: "sparkle",
+        title: "Özel Günler & Düğünler",
+        desc: "Düğün, nişan, davet ve özel organizasyonlarınız için ulaşım ihtiyacınızı birlikte planlayalım.",
+        cta: "Organizasyon için yaz",
+        message:
+          "Merhaba, düğün/özel gün için VIP araç talebim var. Etkinlik türü: …, tarih: …, konum/rota: …, saat aralığı: …, araç tercihi: Vito / A5.",
+      },
+      {
+        icon: "route",
+        title: "Size Özel Rotalar",
+        desc: "Belirlediğiniz kalkış ve varış noktaları için size özel ulaşım talebi oluşturun.",
+        cta: "Özel rota oluştur",
+        message:
+          "Merhaba, özel rota için VIP transfer talebi oluşturmak istiyorum. Kalkış: …, varış: …, tarih/saat: …, yolcu sayısı: …, araç tercihi: Vito / A5.",
+      },
+    ],
+    vehiclesTitle: "Vito veya A5: Yolculuğunuza Uygun Seçenek",
+    vehiclesBody:
+      "Yolcu sayınız, bagaj durumunuz ve yolculuk tercihinize göre araç seçimini birlikte netleştirebiliriz.",
+    vehicles: [
+      {
+        icon: "van",
+        name: "Vito",
+        kicker: "Geniş araç seçeneği",
+        desc: "Birlikte seyahat eden misafirler ve bagajlı yolculuklar için geniş kabinli VIP transfer seçeneği.",
+      },
+      {
+        icon: "car",
+        name: "A5",
+        kicker: "Executive araç seçeneği",
+        desc: "Daha kompakt ve özel bir yolculuk tercih eden misafirler için executive transfer seçeneği.",
+      },
+    ],
+    processTitle: "Talebinizi Üç Adımda İletin",
+    process: [
+      { title: "Rotanızı paylaşın", desc: "Kalkış ve varış noktanızı belirtin." },
+      {
+        title: "Zaman ve detayları ekleyin",
+        desc: "Tarih, saat, yolcu ve bagaj bilgilerinizi yazın.",
+      },
+      {
+        title: "Araç tercihinizi belirtin",
+        desc: "Vito veya A5 tercihinizi talebinize ekleyin.",
+      },
+    ],
+    ctaTitle: "VIP ulaşım talebinizi şimdi iletin",
+    ctaBody:
+      "Havalimanı, özel rota veya organizasyon bilgilerinizi WhatsApp üzerinden gönderin; talebinizi birlikte netleştirelim.",
+    cta: "WhatsApp'tan VIP Transfer Sor",
+    generalMessage:
+      "Merhaba, Nova Atlas Turizm VIP taşımacılık hizmeti hakkında bilgi almak istiyorum. Rota: …, tarih/saat: …, yolcu sayısı: …, araç tercihi: Vito / A5.",
+    home: {
+      eyebrow: "VIP Taşımacılık",
+      title: "Çorlu'dan Havalimanına ve Özel Günlerinize VIP Ulaşım",
+      body: "Vito ve A5 araç seçeneklerimizle havalimanı transferlerinden size özel rotalara, düğünlerden özel organizasyonlara kadar ulaşım talebinizi birlikte planlayalım.",
+      points: [
+        "Çorlu – İstanbul Havalimanı ve Sabiha Gökçen",
+        "Vito ve A5 araç seçenekleri",
+        "Özel rotalar, düğünler ve özel günler",
+      ],
+      cta: "VIP Taşımacılığı İncele",
+    },
   },
   contact: {
     h2: "Bize Ulaşın",

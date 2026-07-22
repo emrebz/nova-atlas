@@ -1,7 +1,9 @@
 ---
+import { Image } from "astro:assets";
 import { site, waUrl } from "../config/site";
 import { useTranslations, asLocale } from "../i18n/utils";
 import Icon from "./Icon.astro";
+import novaAtlasLogo from "../../docs/logo/nova-atlas-no-bg.png";
 
 const locale = asLocale(Astro.currentLocale);
 const t = useTranslations(locale);
@@ -71,9 +73,9 @@ const t = useTranslations(locale);
     </defs>
   </svg>
 
-  <!-- Content -->
+  <!-- Content + brand panel -->
   <div
-    class="container-site relative flex min-h-[92svh] flex-col justify-center pt-(--header-h) pb-28"
+    class="container-site relative grid min-h-[92svh] items-center gap-12 pt-[calc(var(--header-h)+3rem)] pb-28 lg:grid-cols-[minmax(0,1.14fr)_minmax(310px,0.86fr)] lg:gap-14 lg:pt-[calc(var(--header-h)+2rem)] lg:pb-28"
   >
     <div class="max-w-3xl">
       <p
@@ -89,7 +91,20 @@ const t = useTranslations(locale);
         {t.hero.h1}
       </h1>
 
-      <p class="mt-6 max-w-2xl text-xl leading-relaxed font-medium text-white/90">
+      {/* Compact brand seal — centered under the headline on mobile/tablet;
+          desktop shows the large plaque on the right. */}
+      <figure class="hero-plaque-mobile mx-auto mt-8 w-fit rounded-2xl p-3.5 lg:hidden">
+        <Image
+          src={novaAtlasLogo}
+          alt=""
+          widths={[240, 360]}
+          sizes="176px"
+          loading="eager"
+          class="h-auto w-44"
+        />
+      </figure>
+
+      <p class="mt-8 max-w-2xl text-xl leading-relaxed font-medium text-white/90">
         {t.hero.sub}
       </p>
 
@@ -108,6 +123,57 @@ const t = useTranslations(locale);
           {t.hero.cta}
         </a>
       </div>
+    </div>
+
+    <!-- Brand seal — the logo's navy wordmark needs a light surface, so it
+         rests on a warm cream plaque that lifts off the midnight hero. -->
+    <div
+      class="relative hidden items-center justify-center lg:flex"
+      aria-hidden="true"
+    >
+      <!-- Soft gold halo integrates the plaque into the sky -->
+      <div
+        class="pointer-events-none absolute -inset-4 rounded-[2.75rem] bg-accent/20 blur-3xl"
+      >
+      </div>
+      <div
+        class="pointer-events-none absolute inset-x-10 top-6 bottom-10 rounded-full bg-white/10 blur-2xl"
+      >
+      </div>
+
+      <figure class="hero-plaque relative w-full max-w-[30rem]">
+        <div class="relative overflow-hidden rounded-[1.9rem] p-10 xl:p-12">
+          <!-- Warm corner sheen -->
+          <div
+            class="pointer-events-none absolute inset-0"
+            style="background: radial-gradient(460px 300px at 80% -8%, rgb(195 154 62 / 0.16), transparent 70%);"
+          >
+          </div>
+
+          <Image
+            src={novaAtlasLogo}
+            alt=""
+            widths={[480, 677]}
+            sizes="(min-width: 1280px) 30rem, 40vw"
+            loading="lazy"
+            decoding="async"
+            class="relative mx-auto h-auto w-full"
+          />
+
+          <!-- Gold flourish echoing the logo's nova star -->
+          <div
+            class="relative mx-auto mt-6 flex items-center justify-center gap-3"
+          >
+            <span
+              class="h-px w-16 bg-gradient-to-r from-transparent to-[#c39a3e]/70"
+            ></span>
+            <Icon name="star4" class="h-3 w-3 text-[#c39a3e]" />
+            <span
+              class="h-px w-16 bg-gradient-to-l from-transparent to-[#c39a3e]/70"
+            ></span>
+          </div>
+        </div>
+      </figure>
     </div>
   </div>
 
@@ -188,5 +254,41 @@ const t = useTranslations(locale);
         rgb(42 55 96 / 0.55),
         transparent 70%
       );
+  }
+
+  /* Premium "brand seal": warm cream face, gold outer + white inner hairline
+     (a certificate-style double frame), and a soft float above the hero. */
+  .hero-plaque > div {
+    background: linear-gradient(158deg, #ffffff 0%, #f4f0e8 100%);
+    border: 1px solid rgb(195 154 62 / 0.4);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.85),
+      inset 0 0 0 1px rgb(255 255 255 / 0.55),
+      0 26px 60px -22px rgb(2 7 20 / 0.6),
+      0 10px 24px -14px rgb(2 7 20 / 0.45);
+  }
+
+  .hero-plaque {
+    animation: plaque-float 7s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  @keyframes plaque-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  /* Compact mobile seal — same cream face + gold hairline, calmer shadow. */
+  .hero-plaque-mobile {
+    background: linear-gradient(158deg, #ffffff 0%, #f4f0e8 100%);
+    border: 1px solid rgb(195 154 62 / 0.4);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.85),
+      0 14px 30px -14px rgb(2 7 20 / 0.5);
   }
 </style>

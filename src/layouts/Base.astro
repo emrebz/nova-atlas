@@ -13,12 +13,33 @@ import bricolage700Ext from "@fontsource/bricolage-grotesque/files/bricolage-gro
 import inter400 from "@fontsource/inter/files/inter-latin-400-normal.woff2?url";
 import inter400Ext from "@fontsource/inter/files/inter-latin-ext-400-normal.woff2?url";
 
+interface Props {
+  /** Overrides <title>; defaults to the locale's homepage title. */
+  title?: string;
+  /** Overrides <meta description>; defaults to the locale's homepage description. */
+  description?: string;
+  /** Reciprocal locale paths for this page (hreflang + language switch). */
+  alternates?: { tr: string; en: string };
+  /** Extra JSON-LD objects to append (e.g. BreadcrumbList, TouristTrip). */
+  extraSchema?: Record<string, unknown>[];
+}
+
+const {
+  title: pageTitle,
+  description: pageDescription,
+  alternates = { tr: "/", en: "/en/" },
+  extraSchema = [],
+} = Astro.props;
+
 const locale = asLocale(Astro.currentLocale);
 const t = useTranslations(locale);
 
+const title = pageTitle ?? t.meta.title;
+const description = pageDescription ?? t.meta.description;
+
 const canonical = new URL(Astro.url.pathname, site.url).href;
-const trUrl = new URL("/", site.url).href;
-const enUrl = new URL("/en/", site.url).href;
+const trUrl = new URL(alternates.tr, site.url).href;
+const enUrl = new URL(alternates.en, site.url).href;
 const ogImage = new URL("/og-image.jpg", site.url).href;
 
 const travelAgency = {
@@ -53,8 +74,11 @@ const website = {
   publisher: { "@id": `${site.url}/#organization` },
 };
 
-const structuredData =
-  Astro.url.pathname === "/" ? [travelAgency, website] : [travelAgency];
+const structuredData = [
+  travelAgency,
+  ...(Astro.url.pathname === "/" ? [website] : []),
+  ...extraSchema,
+];
 
 const preloadFonts = [bricolage700, bricolage700Ext, inter400, inter400Ext];
 ---
@@ -128,8 +152,8 @@ const preloadFonts = [bricolage700, bricolage700Ext, inter400, inter400Ext];
       })();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{t.meta.title}</title>
-    <meta name="description" content={t.meta.description} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#0b1226" />
@@ -143,8 +167,8 @@ const preloadFonts = [bricolage700, bricolage700Ext, inter400, inter400Ext];
     <!-- Open Graph / Twitter -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.brand} />
-    <meta property="og:title" content={t.meta.title} />
-    <meta property="og:description" content={t.meta.description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
@@ -155,8 +179,8 @@ const preloadFonts = [bricolage700, bricolage700Ext, inter400, inter400Ext];
       content={locale === "tr" ? "en_US" : "tr_TR"}
     />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={t.meta.title} />
-    <meta name="twitter:description" content={t.meta.description} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
     {
@@ -191,7 +215,7 @@ const preloadFonts = [bricolage700, bricolage700Ext, inter400, inter400Ext];
       {t.a11y.skip}
     </a>
 
-    <Header />
+    <Header alternates={alternates} />
 
     <main id="main">
       <slot />

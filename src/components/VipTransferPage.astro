@@ -1,0 +1,242 @@
+---
+import { Image } from "astro:assets";
+import vipHero from "../assets/vip/vip-transfer-hero.png";
+import { site } from "../config/site";
+import { asLocale, localeHome, useTranslations } from "../i18n/utils";
+import Icon from "./Icon.astro";
+import Reveal from "./Reveal.astro";
+
+const locale = asLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+const v = t.vip;
+const home = localeHome(locale);
+const waHref = (message: string) =>
+  `https://wa.me/${site.phoneRaw}?text=${encodeURIComponent(message)}`;
+---
+
+<article>
+  <header class="vip-hero relative isolate overflow-hidden bg-primary-deep text-white">
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+      <Image
+        src={vipHero}
+        alt=""
+        width={1920}
+        height={1080}
+        widths={[640, 960, 1280, 1600, 1920]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        class="h-full w-full object-cover object-center"
+      />
+    </div>
+    <div class="vip-hero-scrim pointer-events-none absolute inset-0" aria-hidden="true"></div>
+
+    <div
+      class="container-site relative flex min-h-[72svh] flex-col justify-end pt-[calc(var(--header-h)+3rem)] pb-12 md:min-h-[78svh] md:pb-16"
+    >
+      <nav aria-label="Breadcrumb" class="mb-5 text-sm font-medium text-white/75">
+        <ol class="flex flex-wrap items-center gap-2">
+          <li>
+            <a href={home} class="rounded transition hover:text-accent-soft">
+              {t.nav.home.label}
+            </a>
+          </li>
+          <li aria-hidden="true" class="text-white/40">/</li>
+          <li aria-current="page" class="text-white">{v.breadcrumb}</li>
+        </ol>
+      </nav>
+
+      <p
+        class="mb-4 inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-primary-deep/55 px-4 py-2 text-xs font-semibold tracking-[0.14em] text-accent-soft uppercase backdrop-blur-md"
+      >
+        <Icon name="sparkle" class="h-4 w-4" />
+        {v.eyebrow}
+      </p>
+
+      <h1
+        class="font-display max-w-4xl text-[clamp(2.35rem,6vw,4.75rem)] leading-[0.98] font-bold tracking-[-0.035em]"
+      >
+        {v.h1}
+      </h1>
+      <p class="mt-5 max-w-2xl text-base leading-relaxed text-white/85 sm:text-lg md:text-xl">
+        {v.lead}
+      </p>
+
+      <div class="mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
+        <a
+          href={waHref(v.generalMessage)}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex min-h-13 items-center gap-2.5 rounded-full bg-wa-strong px-7 py-3.5 font-semibold text-white shadow-[0_12px_32px_rgb(21_128_61/0.4)] transition-transform duration-200 hover:scale-[1.03] hover:bg-wa-deep active:scale-[0.99]"
+        >
+          <Icon name="whatsapp" class="h-5 w-5" />
+          {v.heroCta}
+        </a>
+        <ul class="flex flex-wrap gap-2" aria-label={v.heroAlt}>
+          {
+            v.chips.map((chip) => (
+              <li class="rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-sm font-medium text-white/90 backdrop-blur-sm">
+                {chip}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <section class="bg-surface py-16 md:py-24" aria-labelledby="vip-services-title">
+    <div class="container-site">
+      <Reveal>
+        <div class="max-w-3xl">
+          <p class="text-sm font-semibold tracking-[0.14em] text-accent-strong uppercase">
+            {v.breadcrumb}
+          </p>
+          <h2
+            id="vip-services-title"
+            class="font-display mt-3 text-3xl font-bold tracking-tight text-heading md:text-5xl"
+          >
+            {v.servicesTitle}
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-muted">{v.servicesBody}</p>
+        </div>
+      </Reveal>
+
+      <div class="mt-10 grid gap-5 md:grid-cols-2">
+        {
+          v.services.map((service, index) => (
+            <Reveal delay={(index % 2) * 80}>
+              <article class="group flex h-full flex-col rounded-3xl border border-line bg-surface-2 p-6 shadow-[0_12px_36px_rgb(11_18_38/0.06)] transition duration-300 hover:-translate-y-1 hover:border-accent/50 md:p-8">
+                <span class="grid size-12 place-items-center rounded-2xl bg-primary text-accent-soft shadow-[0_8px_20px_rgb(11_18_38/0.16)]">
+                  <Icon name={service.icon} class="h-6 w-6" />
+                </span>
+                <h3 class="font-display mt-6 text-2xl font-bold tracking-tight text-heading">
+                  {service.title}
+                </h3>
+                <p class="mt-3 flex-1 leading-relaxed text-muted">{service.desc}</p>
+                <a
+                  href={waHref(service.message)}
+                  target="_blank"
+                  rel="noopener"
+                  class="mt-7 inline-flex w-fit items-center gap-2 rounded-full bg-wa-strong px-5 py-3 text-sm font-semibold text-white transition hover:bg-wa-deep"
+                >
+                  <Icon name="whatsapp" class="h-4.5 w-4.5" />
+                  {service.cta}
+                </a>
+              </article>
+            </Reveal>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="overflow-hidden bg-primary-deep py-16 text-white md:py-24" aria-labelledby="vip-vehicles-title">
+    <div class="container-site grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+      <Reveal>
+        <div class="lg:sticky lg:top-[calc(var(--header-h)+2rem)]">
+          <p class="text-sm font-semibold tracking-[0.14em] text-accent-soft uppercase">
+            Vito · A5
+          </p>
+          <h2
+            id="vip-vehicles-title"
+            class="font-display mt-3 text-3xl font-bold tracking-tight md:text-5xl"
+          >
+            {v.vehiclesTitle}
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-white/70">{v.vehiclesBody}</p>
+        </div>
+      </Reveal>
+
+      <div class="grid gap-5 sm:grid-cols-2">
+        {
+          v.vehicles.map((vehicle, index) => (
+            <Reveal delay={index * 90}>
+              <article class="h-full rounded-3xl border border-white/12 bg-white/6 p-7 backdrop-blur-sm md:p-8">
+                <span class="grid size-14 place-items-center rounded-2xl bg-accent text-primary-deep">
+                  <Icon name={vehicle.icon} class="h-7 w-7" />
+                </span>
+                <p class="mt-7 text-sm font-semibold tracking-wide text-accent-soft uppercase">
+                  {vehicle.kicker}
+                </p>
+                <h3 class="font-display mt-2 text-4xl font-bold tracking-tight">{vehicle.name}</h3>
+                <p class="mt-4 leading-relaxed text-white/70">{vehicle.desc}</p>
+              </article>
+            </Reveal>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-surface-2 py-16 md:py-24" aria-labelledby="vip-process-title">
+    <div class="container-site">
+      <Reveal>
+        <h2
+          id="vip-process-title"
+          class="font-display max-w-2xl text-3xl font-bold tracking-tight text-heading md:text-5xl"
+        >
+          {v.processTitle}
+        </h2>
+      </Reveal>
+
+      <ol class="mt-10 grid gap-5 md:grid-cols-3">
+        {
+          v.process.map((step, index) => (
+            <Reveal as="li" delay={index * 80}>
+              <div class="h-full rounded-3xl border border-line bg-surface p-6 md:p-8">
+                <span class="font-display grid size-11 place-items-center rounded-full bg-primary text-sm font-bold text-accent-soft">
+                  0{index + 1}
+                </span>
+                <h3 class="font-display mt-6 text-xl font-bold tracking-tight text-heading">
+                  {step.title}
+                </h3>
+                <p class="mt-2 leading-relaxed text-muted">{step.desc}</p>
+              </div>
+            </Reveal>
+          ))
+        }
+      </ol>
+
+      <Reveal>
+        <div class="mt-14 overflow-hidden rounded-[2rem] bg-primary p-7 text-white shadow-[0_24px_60px_rgb(11_18_38/0.18)] md:p-12">
+          <div class="flex flex-col items-start justify-between gap-7 lg:flex-row lg:items-center">
+            <div class="max-w-2xl">
+              <h2 class="font-display text-3xl font-bold tracking-tight md:text-4xl">
+                {v.ctaTitle}
+              </h2>
+              <p class="mt-3 leading-relaxed text-white/75">{v.ctaBody}</p>
+            </div>
+            <a
+              href={waHref(v.generalMessage)}
+              target="_blank"
+              rel="noopener"
+              class="inline-flex min-h-13 shrink-0 items-center gap-2.5 rounded-full bg-wa-strong px-7 py-3.5 font-semibold text-white transition-transform duration-200 hover:scale-[1.03] hover:bg-wa-deep"
+            >
+              <Icon name="whatsapp" class="h-5 w-5" />
+              {v.cta}
+            </a>
+          </div>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+</article>
+
+<style>
+  .vip-hero-scrim {
+    background:
+      linear-gradient(180deg, rgb(5 10 24 / 0.34) 0%, rgb(5 10 24 / 0.2) 38%, rgb(5 10 24 / 0.92) 100%),
+      linear-gradient(90deg, rgb(5 10 24 / 0.65) 0%, transparent 68%);
+  }
+
+  @media (max-width: 640px) {
+    .vip-hero :global(img) {
+      object-position: 54% center;
+    }
+
+    .vip-hero-scrim {
+      background: linear-gradient(180deg, rgb(5 10 24 / 0.4) 0%, rgb(5 10 24 / 0.45) 35%, rgb(5 10 24 / 0.96) 100%);
+    }
+  }
+</style>

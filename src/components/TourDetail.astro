@@ -1,0 +1,352 @@
+---
+import { Image } from "astro:assets";
+import { site } from "../config/site";
+import type { Locale } from "../i18n/utils";
+import { useTranslations, localeHome } from "../i18n/utils";
+import { tours, tourPath, type Tour, type TourContent } from "../data/tours";
+import { tourImages } from "../data/tourImages";
+import Icon from "./Icon.astro";
+import Reveal from "./Reveal.astro";
+
+interface Props {
+  tour: Tour;
+  content: TourContent;
+  locale: Locale;
+}
+
+const { tour, content, locale } = Astro.props;
+const t = useTranslations(locale);
+const d = t.tours.detail;
+
+const home = localeHome(locale);
+const toursHref = locale === "tr" ? "/rotalar/" : "/en/routes/";
+
+// The rich, tour-specific WhatsApp message lives with the i18n carousel item.
+const waItem = t.tours.items.find((item) => item.art === tour.art);
+const waMessage =
+  waItem?.waMessage ?? `${content.name} — ${site.brand}`;
+const waHref = `https://wa.me/${site.phoneRaw}?text=${encodeURIComponent(waMessage)}`;
+
+const facts = [
+  { icon: "pin", label: d.regionLabel, value: content.region },
+  { icon: "calendar", label: d.durationLabel, value: content.duration },
+  { icon: "sun", label: d.seasonLabel, value: content.season },
+];
+
+// The other three routes, for the "Other Routes" strip
+const others = tours.filter((item) => item.art !== tour.art);
+---
+
+<article>
+  {/* ── Hero banner ─────────────────────────────────────────────────────── */}
+  <header class="tour-hero relative isolate overflow-hidden bg-primary-deep text-white">
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+      <Image
+        src={tourImages[tour.art]}
+        alt=""
+        widths={[480, 768, 1024, 1280, 1600]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        class="h-full w-full object-cover"
+      />
+    </div>
+    <div class="tour-hero-scrim pointer-events-none absolute inset-0" aria-hidden="true"></div>
+
+    <div
+      class="container-site relative flex min-h-[58svh] flex-col justify-end pt-[calc(var(--header-h)+2.5rem)] pb-12 md:min-h-[64svh] md:pb-16"
+    >
+      <nav aria-label="breadcrumb" class="mb-5 text-sm font-medium text-white/75">
+        <ol class="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <li><a href={home} class="rounded transition hover:text-accent-soft">{t.nav.home.label}</a></li>
+          <li aria-hidden="true" class="text-white/40">/</li>
+          <li><a href={toursHref} class="rounded transition hover:text-accent-soft">{d.breadcrumbTours}</a></li>
+          <li aria-hidden="true" class="text-white/40">/</li>
+          <li aria-current="page" class="text-white">{content.name}</li>
+        </ol>
+      </nav>
+
+      <span
+        class="badge-soon mb-4 inline-flex w-fit items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold tracking-wide text-white"
+      >
+        <Icon name="star4" class="h-3.5 w-3.5" />
+        {t.tours.badge}
+      </span>
+
+      <h1
+        class="font-display max-w-3xl text-[clamp(2rem,5.5vw,3.5rem)] leading-[1.05] font-bold tracking-[-0.02em]"
+      >
+        {content.name}
+      </h1>
+      <p class="mt-4 max-w-2xl text-lg leading-relaxed text-white/85 md:text-xl">
+        {content.tagline}
+      </p>
+
+      <ul class="mt-7 flex flex-wrap gap-2.5">
+        {
+          facts.map((fact) => (
+            <li class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium backdrop-blur-sm">
+              <Icon name={fact.icon} class="h-4 w-4 text-accent-soft" />
+              {fact.value}
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <a
+          href={waHref}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex min-h-13 items-center gap-2.5 rounded-full bg-wa-strong px-7 py-3.5 font-semibold text-white shadow-[0_12px_32px_rgb(21_128_61/0.4)] transition-transform duration-200 hover:scale-[1.03] hover:bg-wa-deep active:scale-[0.99]"
+        >
+          <Icon name="whatsapp" class="h-5 w-5" />
+          {d.cta}
+        </a>
+        <a
+          href={toursHref}
+          class="inline-flex min-h-13 items-center gap-2 rounded-full border border-white/25 px-6 py-3.5 font-semibold text-white transition hover:border-white hover:bg-white/10"
+        >
+          <Icon name="arrow-left" class="h-4 w-4" />
+          {d.back}
+        </a>
+      </div>
+    </div>
+  </header>
+
+  {/* ── Body ────────────────────────────────────────────────────────────── */}
+  <div class="bg-surface py-14 md:py-20">
+    <div class="container-site grid gap-12 lg:grid-cols-[1.65fr_1fr] lg:gap-16">
+      {/* Main column */}
+      <div class="min-w-0 space-y-12 md:space-y-16">
+        <Reveal>
+          <section aria-labelledby="tour-overview">
+            <h2
+              id="tour-overview"
+              class="font-display text-2xl font-bold tracking-tight text-heading md:text-3xl"
+            >
+              {d.overview}
+            </h2>
+            <p class="mt-4 text-lg leading-relaxed text-muted">{content.intro}</p>
+          </section>
+        </Reveal>
+
+        <Reveal>
+          <section aria-labelledby="tour-highlights">
+            <h2
+              id="tour-highlights"
+              class="font-display text-2xl font-bold tracking-tight text-heading md:text-3xl"
+            >
+              {d.highlights}
+            </h2>
+            <ul class="mt-6 grid gap-3 sm:grid-cols-2">
+              {
+                content.highlights.map((item) => (
+                  <li class="flex items-start gap-3 rounded-2xl border border-line bg-surface-2 p-4">
+                    <span class="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-accent/15 text-accent-strong">
+                      <Icon name="check" class="h-4 w-4" />
+                    </span>
+                    <span class="font-medium text-ink">{item}</span>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+        </Reveal>
+
+        <Reveal>
+          <section aria-labelledby="tour-itinerary">
+            <h2
+              id="tour-itinerary"
+              class="font-display text-2xl font-bold tracking-tight text-heading md:text-3xl"
+            >
+              {d.itinerary}
+            </h2>
+            <ol class="mt-6 space-y-4">
+              {
+                content.itinerary.map((day, i) => (
+                  <li class="relative rounded-2xl border border-line bg-surface p-5 pl-16 shadow-[0_4px_18px_rgb(11_18_38/0.05)]">
+                    <span
+                      class="font-display absolute top-5 left-5 grid size-8 place-items-center rounded-full bg-primary text-sm font-bold text-accent-soft"
+                      aria-hidden="true"
+                    >
+                      {i + 1}
+                    </span>
+                    <h3 class="font-display text-lg font-semibold tracking-tight text-ink">
+                      {day.title}
+                    </h3>
+                    <p class="mt-1.5 leading-relaxed text-muted">{day.detail}</p>
+                  </li>
+                ))
+              }
+            </ol>
+          </section>
+        </Reveal>
+
+        <div class="grid gap-8 sm:grid-cols-2">
+          <Reveal>
+            <section aria-labelledby="tour-included" class="h-full rounded-2xl border border-line bg-surface-2 p-6">
+              <h2
+                id="tour-included"
+                class="font-display text-xl font-bold tracking-tight text-heading"
+              >
+                {d.included}
+              </h2>
+              <ul class="mt-4 space-y-2.5">
+                {
+                  content.included.map((item) => (
+                    <li class="flex items-start gap-2.5 text-ink">
+                      <Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-wa-strong" />
+                      <span>{item}</span>
+                    </li>
+                  ))
+                }
+              </ul>
+            </section>
+          </Reveal>
+
+          <Reveal delay={90}>
+            <section aria-labelledby="tour-good" class="h-full rounded-2xl border border-line bg-surface-2 p-6">
+              <h2
+                id="tour-good"
+                class="font-display text-xl font-bold tracking-tight text-heading"
+              >
+                {d.goodToKnow}
+              </h2>
+              <ul class="mt-4 space-y-2.5">
+                {
+                  content.goodToKnow.map((item) => (
+                    <li class="flex items-start gap-2.5 text-muted">
+                      <Icon name="sparkle" class="mt-1 h-4 w-4 shrink-0 text-accent-strong" />
+                      <span>{item}</span>
+                    </li>
+                  ))
+                }
+              </ul>
+            </section>
+          </Reveal>
+        </div>
+      </div>
+
+      {/* Sticky sidebar */}
+      <aside class="lg:sticky lg:top-[calc(var(--header-h)+1.5rem)] lg:self-start">
+        <Reveal>
+          <div class="rounded-3xl border border-line bg-surface-2 p-6">
+            <h2 class="font-display text-lg font-bold tracking-tight text-heading">
+              {d.facts}
+            </h2>
+            <ul class="mt-4 space-y-4">
+              {
+                facts.map((fact) => (
+                  <li class="flex items-start gap-3">
+                    <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-primary text-accent-soft">
+                      <Icon name={fact.icon} class="h-5 w-5" />
+                    </span>
+                    <div>
+                      <span class="block text-sm text-muted">{fact.label}</span>
+                      <span class="block font-semibold text-ink">{fact.value}</span>
+                    </div>
+                  </li>
+                ))
+              }
+            </ul>
+
+            <div class="mt-6 rounded-2xl bg-primary p-5 text-white">
+              <p class="font-display text-lg font-semibold tracking-tight">{d.ctaTitle}</p>
+              <p class="mt-2 text-sm text-white/75">{d.ctaBody}</p>
+              <a
+                href={waHref}
+                target="_blank"
+                rel="noopener"
+                class="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2.5 rounded-full bg-wa-strong px-6 py-3 font-semibold text-white transition-transform duration-200 hover:scale-[1.02] hover:bg-wa-deep active:scale-[0.99]"
+              >
+                <Icon name="whatsapp" class="h-5 w-5" />
+                {d.cta}
+              </a>
+            </div>
+
+            <p class="mt-4 text-xs leading-relaxed text-muted">{d.soonNote}</p>
+          </div>
+        </Reveal>
+      </aside>
+    </div>
+  </div>
+
+  {/* ── Other routes ────────────────────────────────────────────────────── */}
+  <div class="bg-surface-2 py-14 md:py-20">
+    <div class="container-site">
+      <Reveal class="flex items-end justify-between gap-4">
+        <h2 class="font-display text-2xl font-bold tracking-tight text-heading md:text-3xl">
+          {d.otherTours}
+        </h2>
+        <a
+          href={toursHref}
+          class="hidden shrink-0 items-center gap-1.5 text-sm font-semibold text-accent-strong hover:underline sm:inline-flex"
+        >
+          {d.back}
+          <Icon name="arrow-right" class="h-4 w-4" />
+        </a>
+      </Reveal>
+
+      <ul class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          others.map((item, i) => {
+            const oc = locale === "tr" ? item.tr : item.en;
+            return (
+              <Reveal as="li" delay={i * 80} class="h-full">
+                <a
+                  href={tourPath(item, locale)}
+                  class="group flex h-full flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_6px_24px_rgb(11_18_38/0.06)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_18px_44px_rgb(11_18_38/0.12)]"
+                >
+                  <div class="tour-thumb aspect-[8/5] overflow-hidden">
+                    <Image
+                      src={tourImages[item.art]}
+                      alt={oc.name}
+                      width={420}
+                      densities={[1, 2]}
+                      loading="lazy"
+                      class="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div class="flex flex-1 flex-col p-5">
+                    <h3 class="font-display text-lg font-semibold tracking-tight text-ink">
+                      {oc.name}
+                    </h3>
+                    <p class="mt-1 text-sm text-muted">{oc.tagline}</p>
+                    <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent-strong">
+                      {t.tours.cardCta}
+                      <Icon name="arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </span>
+                  </div>
+                </a>
+              </Reveal>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </div>
+</article>
+
+<style>
+  /* Scrim keeps the white hero text AA-readable over the photo in both themes. */
+  .tour-hero-scrim {
+    background:
+      linear-gradient(
+        180deg,
+        rgb(11 18 38 / 0.62) 0%,
+        rgb(11 18 38 / 0.32) 32%,
+        rgb(11 18 38 / 0.72) 78%,
+        rgb(11 18 38 / 0.9) 100%
+      ),
+      linear-gradient(90deg, rgb(11 18 38 / 0.55) 0%, transparent 65%);
+  }
+
+  .tour-thumb :global(img) {
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .group:hover .tour-thumb :global(img) {
+    transform: scale(1.06);
+  }
+</style>

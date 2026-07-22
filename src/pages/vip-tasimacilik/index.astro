@@ -1,0 +1,55 @@
+---
+import VipTransferPage from "../../components/VipTransferPage.astro";
+import { site } from "../../config/site";
+import { useTranslations } from "../../i18n/utils";
+import Base from "../../layouts/Base.astro";
+
+const locale = "tr" as const;
+const t = useTranslations(locale);
+const v = t.vip;
+const alternates = { tr: "/vip-tasimacilik/", en: "/en/vip-transfer/" };
+const pageUrl = new URL(alternates.tr, site.url).href;
+
+const breadcrumb = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: t.nav.home.label,
+      item: `${site.url}/`,
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: v.breadcrumb,
+      item: pageUrl,
+    },
+  ],
+};
+
+const service = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Nova Atlas Turizm VIP Taşımacılık",
+  description: v.meta.description,
+  url: pageUrl,
+  serviceType: ["VIP transfer", "Havalimanı transferi", "Özel gün taşımacılığı"],
+  provider: { "@id": `${site.url}/#organization` },
+  areaServed: [
+    { "@type": "City", name: "Çorlu" },
+    { "@type": "Airport", name: "İstanbul Havalimanı", iataCode: "IST" },
+    { "@type": "Airport", name: "Sabiha Gökçen Havalimanı", iataCode: "SAW" },
+  ],
+};
+---
+
+<Base
+  title={v.meta.title}
+  description={v.meta.description}
+  alternates={alternates}
+  extraSchema={[breadcrumb, service]}
+>
+  <VipTransferPage />
+</Base>

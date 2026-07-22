@@ -1,0 +1,72 @@
+---
+import { Image } from "astro:assets";
+import vipHero from "../assets/vip/vip-transfer-hero.png";
+import { asLocale, useTranslations } from "../i18n/utils";
+import Icon from "./Icon.astro";
+import Reveal from "./Reveal.astro";
+
+const locale = asLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+const content = t.vip.home;
+const detailPath = locale === "tr" ? "/vip-tasimacilik/" : "/en/vip-transfer/";
+---
+
+<section class="bg-surface py-16 md:py-24" aria-labelledby="vip-teaser-title">
+  <div class="container-site">
+    <Reveal>
+      <div
+        class="grid overflow-hidden rounded-[2rem] bg-primary-deep text-white shadow-[0_24px_70px_rgb(11_18_38/0.18)] lg:grid-cols-[1.02fr_0.98fr]"
+      >
+        <div class="flex flex-col justify-center p-7 sm:p-10 lg:p-12 xl:p-14">
+          <p class="inline-flex items-center gap-2 text-sm font-semibold tracking-[0.14em] text-accent-soft uppercase">
+            <Icon name="sparkle" class="h-4 w-4" />
+            {content.eyebrow}
+          </p>
+          <h2
+            id="vip-teaser-title"
+            class="font-display mt-4 max-w-xl text-[clamp(2rem,4vw,3.35rem)] leading-[1.05] font-bold tracking-[-0.025em]"
+          >
+            {content.title}
+          </h2>
+          <p class="mt-5 max-w-xl leading-relaxed text-white/72">{content.body}</p>
+
+          <ul class="mt-7 grid gap-3">
+            {
+              content.points.map((point) => (
+                <li class="flex items-start gap-3 text-sm font-medium text-white/90 sm:text-base">
+                  <span class="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-accent/18 text-accent-soft">
+                    <Icon name="check" class="h-4 w-4" />
+                  </span>
+                  {point}
+                </li>
+              ))
+            }
+          </ul>
+
+          <a
+            href={detailPath}
+            class="mt-9 inline-flex min-h-13 w-fit items-center gap-2.5 rounded-full bg-accent px-7 py-3.5 font-semibold text-primary-deep transition duration-200 hover:scale-[1.02] hover:bg-accent-soft"
+          >
+            {content.cta}
+            <Icon name="arrow-right" class="h-4.5 w-4.5" />
+          </a>
+        </div>
+
+        <figure class="relative min-h-72 overflow-hidden sm:min-h-96 lg:min-h-full">
+          <Image
+            src={vipHero}
+            alt={t.vip.heroAlt}
+            widths={[640, 960, 1280]}
+            sizes="(min-width: 1024px) 48vw, 100vw"
+            loading="lazy"
+            class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 hover:scale-[1.025]"
+          />
+          <div
+            class="pointer-events-none absolute inset-0 bg-linear-to-t from-primary-deep/35 via-transparent to-transparent lg:bg-linear-to-r lg:from-primary-deep/35 lg:to-transparent"
+            aria-hidden="true"
+          ></div>
+        </figure>
+      </div>
+    </Reveal>
+  </div>
+</section>

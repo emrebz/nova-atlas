@@ -1,6 +1,7 @@
 ---
 import { site } from "../config/site";
 import { useTranslations, asLocale, localeHome } from "../i18n/utils";
+import Icon from "./Icon.astro";
 import Wordmark from "./Wordmark.astro";
 
 const locale = asLocale(Astro.currentLocale);
@@ -11,6 +12,7 @@ const socialLabels: Record<string, string> = {
   instagram: "Instagram",
   facebook: "Facebook",
 };
+const socialIcons = new Set(["instagram", "facebook"]);
 ---
 
 <footer
@@ -55,10 +57,17 @@ const socialLabels: Record<string, string> = {
                 href={url}
                 target="_blank"
                 rel="noopener"
-                aria-label={socialLabels[name] ?? name}
-                class="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-sm font-semibold uppercase hover:border-accent-soft hover:text-accent-soft"
+                aria-label={socialIcons.has(name) ? (socialLabels[name] ?? name) : undefined}
+                class="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-sm font-semibold uppercase transition-colors hover:border-accent-soft hover:text-accent-soft"
               >
-                {name === "instagram" ? "IG" : name === "facebook" ? "FB" : name.slice(0, 2)}
+                {
+                  socialIcons.has(name) ? (
+                    <Icon name={name} class="h-5 w-5" />
+                  ) : (
+                    /* Unknown network: letters ARE the accessible name (no aria-label) */
+                    name.slice(0, 2)
+                  )
+                }
               </a>
             </li>
           ))}

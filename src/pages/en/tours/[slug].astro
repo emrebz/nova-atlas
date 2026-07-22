@@ -1,0 +1,63 @@
+---
+import Base from "../../../layouts/Base.astro";
+import TourDetail from "../../../components/TourDetail.astro";
+import { site } from "../../../config/site";
+import { useTranslations } from "../../../i18n/utils";
+import { tours, tourPath, type Tour } from "../../../data/tours";
+
+export function getStaticPaths() {
+  return tours.map((tour) => ({
+    params: { slug: tour.slug.en },
+    props: { tour },
+  }));
+}
+
+interface Props {
+  tour: Tour;
+}
+
+const { tour } = Astro.props;
+const locale = "en" as const;
+const content = tour.en;
+const t = useTranslations(locale);
+const d = t.tours.detail;
+
+const title = `${content.name} — ${d.metaTitleSuffix} | ${site.brand}`;
+const description = `${content.name}: ${content.tagline}. ${content.duration}.`;
+const alternates = { tr: tourPath(tour, "tr"), en: tourPath(tour, "en") };
+const pageUrl = new URL(alternates.en, site.url).href;
+
+const breadcrumb = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: t.nav.home.label, item: `${site.url}/en/` },
+    { "@type": "ListItem", position: 2, name: d.breadcrumbTours, item: `${site.url}/en/#${t.tours.anchor}` },
+    { "@type": "ListItem", position: 3, name: content.name, item: pageUrl },
+  ],
+};
+
+const trip = {
+  "@context": "https://schema.org",
+  "@type": "TouristTrip",
+  name: `${content.name} — ${d.metaTitleSuffix}`,
+  description: content.intro,
+  url: pageUrl,
+  touristType: content.region,
+  itinerary: content.itinerary.map((day, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: day.title,
+  })),
+  provider: { "@id": `${site.url}/#organization` },
+};
+---
+
+<Base
+  title={title}
+  description={description}
+  alternates={alternates}
+  extraSchema={[breadcrumb, trip]}
+>
+  <TourDetail tour={tour} content={content} locale={locale} />
+</Base>
