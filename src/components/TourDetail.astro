@@ -119,17 +119,15 @@ const others = tours.filter((item) => item.art !== tour.art);
     <div class="container-site grid gap-12 lg:grid-cols-[1.65fr_1fr] lg:gap-16">
       {/* Main column */}
       <div class="min-w-0 space-y-12 md:space-y-16">
-        <Reveal>
-          <section aria-labelledby="tour-overview">
-            <h2
-              id="tour-overview"
-              class="font-display text-2xl font-bold tracking-tight text-heading md:text-3xl"
-            >
-              {d.overview}
-            </h2>
-            <p class="mt-4 text-lg leading-relaxed text-muted">{content.intro}</p>
-          </section>
-        </Reveal>
+        <section aria-labelledby="tour-overview">
+          <h2
+            id="tour-overview"
+            class="font-display text-2xl font-bold tracking-tight text-heading md:text-3xl"
+          >
+            {d.overview}
+          </h2>
+          <p class="mt-4 text-lg leading-relaxed text-muted">{content.intro}</p>
+        </section>
 
         <Reveal>
           <section aria-labelledby="tour-highlights">
