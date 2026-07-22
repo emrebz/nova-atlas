@@ -86,9 +86,26 @@ const t = useTranslations(locale);
       </p>
 
       <h1
-        class="font-display text-[clamp(2.25rem,6vw,4.5rem)] leading-[1.05] font-bold tracking-[-0.02em]"
+        aria-label={t.hero.h1}
+        class="font-display flex flex-col items-start font-bold tracking-[-0.025em]"
       >
-        {t.hero.h1}
+        <span
+          aria-hidden="true"
+          class="hero-brand text-[clamp(3.25rem,8vw,6rem)] leading-[0.88]"
+        >
+          {t.hero.brand}
+        </span>
+        <span aria-hidden="true" class="mt-4 flex items-center gap-3">
+          <span class="h-px w-20 bg-gradient-to-r from-accent-soft to-accent/20"></span>
+          <Icon name="star4" class="h-3.5 w-3.5 text-accent-soft" />
+          <span class="h-px w-8 bg-gradient-to-r from-accent/60 to-transparent"></span>
+        </span>
+        <span
+          aria-hidden="true"
+          class="mt-4 max-w-2xl text-[clamp(1.7rem,4vw,3.25rem)] leading-[1.08] text-white"
+        >
+          {t.hero.descriptor}
+        </span>
       </h1>
 
       {/* Compact brand seal — centered under the headline on mobile/tablet;
@@ -254,6 +271,23 @@ const t = useTranslations(locale);
         rgb(42 55 96 / 0.55),
         transparent 70%
       );
+  }
+
+  .hero-brand {
+    color: var(--brand-accent-soft);
+    background: linear-gradient(105deg, #c39a3e 0%, #f4dda4 48%, #c39a3e 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 12px 36px rgb(195 154 62 / 0.16);
+  }
+
+  @media (forced-colors: active) {
+    .hero-brand {
+      background: none;
+      -webkit-text-fill-color: currentColor;
+      text-shadow: none;
+    }
   }
 
   /* Premium "brand seal": warm cream face, gold outer + white inner hairline

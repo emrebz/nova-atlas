@@ -1,0 +1,335 @@
+---
+import { getImage } from "astro:assets";
+import { site } from "../config/site";
+import { asLocale, useTranslations } from "../i18n/utils";
+import Icon from "./Icon.astro";
+import posterSrc from "../assets/media/film-poster.jpg";
+
+const locale = asLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+const f = t.film;
+
+// Optimized poster (WebP) for the <video poster> attribute + reduced-motion fallback.
+const poster = await getImage({
+  src: posterSrc,
+  width: 1280,
+  height: 720,
+  format: "webp",
+});
+---
+
+<section
+  id="film-hero"
+  class="film-hero relative isolate w-full overflow-hidden bg-primary-deep text-white"
+  aria-label={f.regionLabel}
+  data-state="loading"
+  data-lbl-mute={f.mute}
+  data-lbl-unmute={f.unmute}
+  data-lbl-fs={f.fullscreen}
+  data-lbl-exit-fs={f.exitFullscreen}
+  data-lbl-play={f.play}
+  data-lbl-pause={f.pause}
+>
+  <video
+    id="brand-film"
+    class="film-video absolute inset-0 h-full w-full object-cover"
+    poster={poster.src}
+    muted
+    loop
+    playsinline
+    preload="none"
+    disablepictureinpicture
+    aria-label={f.regionLabel}
+  >
+    <source src={site.brandFilm.webm} type="video/webm" />
+    <source src={site.brandFilm.mp4} type="video/mp4" />
+  </video>
+
+  <!-- Scrims: top keeps the transparent header legible, bottom holds the UI -->
+  <div
+    class="film-scrim-top pointer-events-none absolute inset-x-0 top-0 h-40"
+    aria-hidden="true"
+  >
+  </div>
+  <div
+    class="film-scrim-bottom pointer-events-none absolute inset-x-0 bottom-0 h-64"
+    aria-hidden="true"
+  >
+  </div>
+
+  <!-- Full-area tap target → toggles sound (unmute on first tap) -->
+  <button
+    id="film-sound-toggle"
+    type="button"
+    class="absolute inset-0 z-10 cursor-pointer"
+    aria-label={f.unmute}
+  >
+    <span class="sr-only">{f.unmute}</span>
+  </button>
+
+  <!-- Centered play button — shown when autoplay is blocked or reduced-motion -->
+  <button
+    id="film-play"
+    type="button"
+    class="film-play absolute top-1/2 left-1/2 z-20 grid size-20 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/30 bg-black/35 text-white backdrop-blur-sm transition hover:scale-105 hover:bg-black/50"
+    aria-label={f.play}
+    hidden
+  >
+    <Icon name="play" class="ml-1 h-8 w-8" />
+  </button>
+
+  <!-- Content overlay — pass-through so the play button / sound toggle beneath
+       stay clickable; only the controls opt back into pointer events. -->
+  <div
+    class="pointer-events-none relative z-20 flex h-full min-h-[88svh] flex-col justify-end px-(--container-pad) pt-(--header-h) pb-8 md:min-h-[100svh] md:pb-10"
+  >
+    <div class="container-site !px-0">
+      <div class="flex items-end justify-between gap-4">
+        <p
+          class="inline-flex items-center gap-2 text-sm font-semibold tracking-[0.2em] text-accent-soft uppercase drop-shadow-[0_2px_10px_rgb(0_0_0/0.5)]"
+        >
+          <Icon name="star4" class="h-4 w-4" />
+          {f.tagline}
+        </p>
+
+        <!-- Controls: unmute + fullscreen -->
+        <div class="pointer-events-auto flex items-center gap-2.5">
+          <button
+            id="film-mute-btn"
+            type="button"
+            class="film-ctl grid size-12 place-items-center rounded-full border border-white/25 bg-black/30 text-white backdrop-blur-sm transition hover:border-white/60 hover:bg-black/50"
+            aria-label={f.unmute}
+          >
+            <Icon name="mute" class="film-ic-muted h-5 w-5" />
+            <Icon name="volume" class="film-ic-sound hidden h-5 w-5" />
+          </button>
+          <button
+            id="film-fs-btn"
+            type="button"
+            class="film-ctl grid size-12 place-items-center rounded-full border border-white/25 bg-black/30 text-white backdrop-blur-sm transition hover:border-white/60 hover:bg-black/50"
+            aria-label={f.fullscreen}
+          >
+            <Icon name="expand" class="film-ic-expand h-5 w-5" />
+            <Icon name="minimize" class="film-ic-minimize hidden h-5 w-5" />
+          </button>
+        </div>
+      </div>
+
+      <!-- Scroll cue -->
+      <div class="mt-6 flex justify-center">
+        <span
+          class="film-scroll inline-flex flex-col items-center gap-1 text-[0.7rem] font-medium tracking-[0.2em] text-white/70 uppercase"
+        >
+          {f.scroll}
+          <Icon name="chevron-down" class="film-chevron h-5 w-5" />
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- "Tap for sound" hint (auto-hides) -->
+  <div
+    id="film-hint"
+    class="pointer-events-none absolute bottom-28 left-1/2 z-20 -translate-x-1/2 rounded-full bg-black/45 px-4 py-2 text-sm font-medium text-white opacity-0 backdrop-blur-sm transition-opacity duration-500"
+    aria-hidden="true"
+  >
+    {f.tapForSound}
+  </div>
+</section>
+
+<style>
+  .film-hero {
+    background: var(--brand-primary-deep);
+  }
+  .film-scrim-top {
+    background: linear-gradient(
+      180deg,
+      rgb(11 18 38 / 0.6) 0%,
+      transparent 100%
+    );
+  }
+  .film-scrim-bottom {
+    background: linear-gradient(
+      0deg,
+      rgb(11 18 38 / 0.75) 0%,
+      transparent 100%
+    );
+  }
+
+  /* Icon swap driven by section state */
+  #film-hero[data-sound="on"] :global(.film-ic-muted) {
+    display: none;
+  }
+  #film-hero[data-sound="on"] :global(.film-ic-sound) {
+    display: block;
+  }
+  #film-hero[data-fs="on"] :global(.film-ic-expand) {
+    display: none;
+  }
+  #film-hero[data-fs="on"] :global(.film-ic-minimize) {
+    display: block;
+  }
+  /* Hide the big play button once playing */
+  #film-hero[data-state="playing"] #film-play {
+    display: none;
+  }
+
+  .film-chevron {
+    animation: film-bob 1.8s ease-in-out infinite;
+  }
+  @keyframes film-bob {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(4px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .film-chevron {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const section = document.getElementById("film-hero") as HTMLElement | null;
+  const video = document.getElementById("brand-film") as HTMLVideoElement | null;
+  if (section && video) {
+    const soundToggle = document.getElementById("film-sound-toggle")!;
+    const muteBtn = document.getElementById("film-mute-btn")!;
+    const fsBtn = document.getElementById("film-fs-btn")!;
+    const playBtn = document.getElementById("film-play") as HTMLButtonElement;
+    const hint = document.getElementById("film-hint")!;
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const saveData = (navigator as any).connection?.saveData === true;
+
+    // Localized labels come from data-* on the section (set from i18n at render).
+    const L = {
+      mute: section.dataset.lblMute || "Mute",
+      unmute: section.dataset.lblUnmute || "Unmute",
+      fullscreen: section.dataset.lblFs || "Fullscreen",
+      exitFullscreen: section.dataset.lblExitFs || "Exit fullscreen",
+    };
+
+    let hintTimer = 0;
+    const showHint = () => {
+      hint.style.opacity = "1";
+      window.clearTimeout(hintTimer);
+      hintTimer = window.setTimeout(() => (hint.style.opacity = "0"), 4500);
+    };
+
+    const syncSound = () => {
+      const on = !video.muted && video.volume > 0;
+      section.dataset.sound = on ? "on" : "off";
+      const lbl = on ? L.mute : L.unmute;
+      muteBtn.setAttribute("aria-label", lbl);
+      soundToggle.setAttribute("aria-label", lbl);
+      const accessibleText = soundToggle.querySelector(".sr-only");
+      if (accessibleText) accessibleText.textContent = lbl;
+      if (on) hint.style.opacity = "0";
+    };
+
+    const setSound = (on: boolean) => {
+      if (on && video.volume === 0) video.volume = 1;
+      video.muted = !on;
+      syncSound();
+    };
+
+    video.addEventListener("volumechange", syncSound);
+    syncSound();
+
+    const tryAutoplay = () => {
+      setSound(false);
+      video.play().then(
+        () => {
+          section.dataset.state = "playing";
+          showHint();
+        },
+        () => {
+          section.dataset.state = "paused";
+          playBtn.hidden = false;
+        }
+      );
+    };
+
+    // Reduced-motion / Save-Data: don't autoplay — offer an explicit play.
+    if (reduce || saveData) {
+      section.dataset.state = "paused";
+      playBtn.hidden = false;
+      video.preload = "none";
+    } else {
+      video.preload = "auto";
+      tryAutoplay();
+      // Some engines only surface the muted-autoplay grant after metadata loads.
+      video.addEventListener("loadeddata", () => {
+        if (video.paused && section.dataset.state !== "paused") tryAutoplay();
+      });
+    }
+
+    // Center play button → play WITH sound (deliberate user action)
+    playBtn.addEventListener("click", () => {
+      playBtn.hidden = true;
+      section.dataset.state = "playing";
+      setSound(true);
+      video.play().catch(() => {});
+    });
+
+    // Tap on video area → toggle sound (unmute on first tap)
+    soundToggle.addEventListener("click", () => {
+      if (video.paused) {
+        section.dataset.state = "playing";
+        playBtn.hidden = true;
+        video.play().catch(() => {});
+      }
+      setSound(video.muted);
+    });
+
+    muteBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      setSound(video.muted);
+    });
+
+    // Fullscreen
+    const fsEl = section as any;
+    fsBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const doc = document as any;
+      if (!doc.fullscreenElement && !doc.webkitFullscreenElement) {
+        (fsEl.requestFullscreen || fsEl.webkitRequestFullscreen)?.call(fsEl);
+        // iOS Safari only allows fullscreen on the <video> element itself
+        if (!fsEl.requestFullscreen && (video as any).webkitEnterFullscreen) {
+          (video as any).webkitEnterFullscreen();
+        }
+      } else {
+        (doc.exitFullscreen || doc.webkitExitFullscreen)?.call(doc);
+      }
+    });
+    const syncFs = () => {
+      const doc = document as any;
+      const on = !!(doc.fullscreenElement || doc.webkitFullscreenElement);
+      section.dataset.fs = on ? "on" : "off";
+      fsBtn.setAttribute("aria-label", on ? L.exitFullscreen : L.fullscreen);
+    };
+    document.addEventListener("fullscreenchange", syncFs);
+    document.addEventListener("webkitfullscreenchange", syncFs);
+
+    // Pause when scrolled out of view; resume muted autoplay when back.
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            if (!reduce && !saveData && video.paused && section.dataset.state === "playing")
+              video.play().catch(() => {});
+          } else if (!video.paused) {
+            video.pause();
+          }
+        },
+        { threshold: 0.15 }
+      ).observe(section);
+    }
+  }
+</script>

@@ -6,7 +6,7 @@ export const en: Dictionary = {
   meta: {
     title: "Nova Atlas Travel | Travel Agency in Çorlu",
     description:
-      "Nova Atlas Travel in Çorlu provides domestic and international tour planning, visa consultancy, hotel reservations and reliable transport solutions.",
+      "Nova Atlas Travel in Çorlu provides domestic and international tour planning, hotel reservations, VIP transfers and reliable travel solutions.",
     ogLocale: "en_US",
   },
   nav: {
@@ -18,17 +18,31 @@ export const en: Dictionary = {
     contact: { label: "Contact", anchor: "contact" },
   },
   hero: {
-    h1: "Nova Atlas Travel: Reliable Journeys from Çorlu to the World",
-    sub: "An approachable local travel agency for tours, visas, accommodation and transport planning.",
-    lead: "We bring our operational experience in employee transportation into tourism with the responsibility of a family-run company. While our domestic and international tours departing from Çorlu are being prepared, you can already contact us for travel planning and visa support.",
+    h1: "Nova Atlas Turizm Travel Agency",
+    brand: "Nova Atlas",
+    descriptor: "Turizm Travel Agency",
+    sub: "An approachable local travel agency for tours, accommodation and transport planning.",
+    lead: "We bring our operational experience in employee transportation into tourism with the responsibility of a family-run company. While our domestic and international tours departing from Çorlu are being prepared, you can already contact us for travel planning.",
     cta: "Contact Us on WhatsApp",
+  },
+  film: {
+    regionLabel: "Nova Atlas Travel brand film",
+    tagline: "From Çorlu to the World",
+    tapForSound: "Tap for sound",
+    unmute: "Unmute",
+    mute: "Mute",
+    play: "Play",
+    pause: "Pause",
+    fullscreen: "Fullscreen",
+    exitFullscreen: "Exit fullscreen",
+    scroll: "Explore",
   },
   about: {
     h2: "A Çorlu Travel Agency Built on Experience",
     paragraphs: [
       "Nova Atlas Travel is the tourism brand of a family-run company that understands the transport needs of Çorlu and the wider Tekirdağ region. We apply our experience in employee transportation, scheduling and operational coordination to travel and transport services delivered with our own vehicle fleet.",
       "Our aim is not merely to make a booking. We stay accessible throughout the journey, explain the available options clearly and build a plan around each traveller's needs. Corporate discipline and the care of a family business shape how we work.",
-      "Our growing services include domestic and international tours departing from Çorlu, visa consultancy, hotel reservations, employee transportation and VIP transfers. Upcoming tour programmes will be announced on our website and social channels.",
+      "Our growing services include domestic and international tours departing from Çorlu, hotel reservations and VIP transfers. Upcoming tour programmes will be announced on our website and social channels.",
     ],
     whyTitle: "Why Nova Atlas Travel?",
     why: [
@@ -123,14 +137,13 @@ export const en: Dictionary = {
   services: {
     h2: "Travel and Transport Services Based in Çorlu",
     paragraphs: [
-      "We consider tours, visas, accommodation and transport together so that you can plan domestic and international journeys through one local point of contact.",
-      "While tour dates and packages are being prepared, you can contact us on WhatsApp for visa consultancy, hotel reservations, employee transportation and VIP transfer requests.",
+      "We consider tours, accommodation and transport together so that you can plan domestic and international journeys through one local point of contact.",
+      "While tour dates and packages are being prepared, you can contact us on WhatsApp for hotel reservations and VIP transfer requests.",
     ],
     badge: "Coming Soon",
     items: [
       { icon: "compass", title: "Domestic Tours from Çorlu", desc: "Cultural, nature and day-trip route options." },
       { icon: "globe", title: "International Tours", desc: "Programmes for different budgets and travel expectations." },
-      { icon: "passport", title: "Visa Consultancy", desc: "Application document and process support for Schengen, US, UK, Egypt and Dubai visas." },
       { icon: "bed", title: "Hotels & Accommodation", desc: "Accommodation options suited to your travel plans." },
       { icon: "van", title: "Transport & VIP Transfer", desc: "Transport solutions backed by employee transportation experience." },
     ],
@@ -140,19 +153,19 @@ export const en: Dictionary = {
     meta: {
       title: "VIP Transfer in Çorlu | Nova Atlas Turizm",
       description:
-        "Plan Çorlu–Istanbul Airport, Çorlu–Sabiha Gökçen, custom-route, wedding and special-day transfers with Nova Atlas Travel's Vito and A5 vehicle options.",
+        "Plan Çorlu–Istanbul Airport, Çorlu–Sabiha Gökçen, custom-route, wedding and special-day transfers with Nova Atlas Travel's Vito.",
     },
     breadcrumb: "VIP Transfer",
     eyebrow: "Private transport from Çorlu",
     h1: "Let's Plan Your VIP Transfer Around Your Route",
     lead:
-      "We plan airport journeys, custom routes, weddings and special-day transport requests with our Vito and A5 vehicle options.",
+      "We plan airport journeys, custom routes, weddings and special-day transport requests with our Vito.",
     heroCta: "Create a VIP Transfer Request",
-    heroAlt: "Vito and A5 vehicle options for VIP transfers",
-    chips: ["Vito", "A5", "Planning from Çorlu"],
+    heroAlt: "Vito for VIP transfers",
+    chips: ["Vito", "Planning from Çorlu"],
     servicesTitle: "VIP Transport for Your Needs",
     servicesBody:
-      "Send your date, time, departure and destination on WhatsApp; we will clarify the route and vehicle preference around your request.",
+      "Send your date, time, departure and destination on WhatsApp; we will clarify the route and journey details around your request.",
     services: [
       {
         icon: "plane",
@@ -176,7 +189,7 @@ export const en: Dictionary = {
         desc: "Let's plan your transport needs for weddings, engagements, invitations and special events.",
         cta: "Ask about an event",
         message:
-          "Hello, I need a VIP vehicle for a wedding/special day. Event type: …, date: …, location/route: …, time range: …, vehicle preference: Vito / A5.",
+          "Hello, I need a VIP vehicle for a wedding/special day. Event type: …, date: …, location/route: …, time range: …",
       },
       {
         icon: "route",
@@ -184,24 +197,18 @@ export const en: Dictionary = {
         desc: "Create a private transport request for the departure and destination points you choose.",
         cta: "Create a custom route",
         message:
-          "Hello, I'd like to create a VIP transfer request for a custom route. Departure: …, destination: …, date/time: …, passengers: …, vehicle preference: Vito / A5.",
+          "Hello, I'd like to create a VIP transfer request for a custom route. Departure: …, destination: …, date/time: …, passengers: …",
       },
     ],
-    vehiclesTitle: "Vito or A5: An Option for Your Journey",
+    vehiclesTitle: "Vito for Your VIP Journeys",
     vehiclesBody:
-      "We can clarify the vehicle choice together according to your passenger count, luggage and travel preferences.",
+      "We can plan the transfer details with our Vito according to your passenger count, luggage and journey needs.",
     vehicles: [
       {
         icon: "van",
         name: "Vito",
-        kicker: "Spacious vehicle option",
+        kicker: "Spacious VIP vehicle",
         desc: "A spacious-cabin VIP transfer option for guests travelling together and journeys with luggage.",
-      },
-      {
-        icon: "car",
-        name: "A5",
-        kicker: "Executive vehicle option",
-        desc: "An executive transfer option for guests who prefer a more compact and private journey.",
       },
     ],
     processTitle: "Send Your Request in Three Steps",
@@ -212,8 +219,8 @@ export const en: Dictionary = {
         desc: "Include your date, time, passenger and luggage information.",
       },
       {
-        title: "Choose a vehicle",
-        desc: "Add your Vito or A5 preference to your request.",
+        title: "Share additional requests",
+        desc: "Add any other journey details to your request.",
       },
     ],
     ctaTitle: "Send your VIP transport request now",
@@ -221,14 +228,14 @@ export const en: Dictionary = {
       "Share your airport, custom-route or event details on WhatsApp so we can clarify your request together.",
     cta: "Ask About VIP Transfer on WhatsApp",
     generalMessage:
-      "Hello, I'd like information about Nova Atlas Travel's VIP transport service. Route: …, date/time: …, passengers: …, vehicle preference: Vito / A5.",
+      "Hello, I'd like information about Nova Atlas Travel's VIP transport service. Route: …, date/time: …, passengers: …",
     home: {
       eyebrow: "VIP Transfer",
       title: "VIP Transport from Çorlu to Airports and Special Occasions",
-      body: "Let's plan your transport request with Vito and A5 vehicle options, from airport transfers and custom routes to weddings and special events.",
+      body: "Let's plan your transport request with our Vito, from airport transfers and custom routes to weddings and special events.",
       points: [
         "Çorlu – Istanbul Airport and Sabiha Gökçen",
-        "Vito and A5 vehicle options",
+        "VIP transport with a spacious Vito",
         "Custom routes, weddings and special occasions",
       ],
       cta: "Explore VIP Transfer",
@@ -248,7 +255,7 @@ export const en: Dictionary = {
   },
   footer: {
     line: "Nova Atlas Travel — Çorlu",
-    note: "A TÜRSAB member travel agency based in Çorlu, providing tour, visa, accommodation and transport services.",
+    note: "A TÜRSAB member travel agency based in Çorlu, providing tour, accommodation and transport services.",
     rights: "All rights reserved.",
   },
   a11y: {

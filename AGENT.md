@@ -11,7 +11,7 @@ the site fast and accessible, and the hard-won gotchas already fixed once.
 **Nova Atlas Turizm** (novaatlastur.com) is the marketing site for a newly
 founded, family-run travel agency in Çorlu, Tekirdağ, Türkiye. The company grew
 out of an employee-transportation business and offers domestic/international
-tours, visa consultancy, hotel reservations, and VIP transfer with its own
+tours, hotel reservations, and VIP transfer with its own
 vehicle fleet. It is a TÜRSAB member agency.
 
 **Business intent — this shapes every design decision:**
@@ -344,8 +344,8 @@ Handled centrally in `Base.astro`; per-page via props:
   cards, later real photos; auto-drift + prev/next controls + touch scrolling.
 - **Mobile menu bg fix** (gotcha #1) and hero ambience (twinkle/nova) pass.
 - **Rebrand pass:** "Nova Atlas Turizm" naming, dark mode with pre-paint theme
-  bootstrap, TÜRSAB badge in About, social links, expanded services (visa
-  focus, transport/VIP), richer hero copy grounded in the family transport
+  bootstrap, TÜRSAB badge in About, social links, expanded services
+  (accommodation and transport/VIP), richer hero copy grounded in the family transport
   business.
 - **Tour detail pages:** `/turlar/[slug]` + `/en/tours/[slug]` from
   `src/data/tours.ts` (localized slugs, sample itineraries, highlights,

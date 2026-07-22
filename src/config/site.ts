@@ -26,6 +26,15 @@ export const site = {
     tr: "Merhaba, Nova Atlas Turizm hakkında bilgi almak istiyorum.",
     en: "Hello, I'd like to get information about Nova Atlas Travel.",
   },
+  /**
+   * Brand film video sources. The video is hosted OFF the repo (Cloudflare R2)
+   * so the Git/Pages deploy stays light. The poster image is bundled from
+   * `src/assets/` and is safe to commit.
+   */
+  brandFilm: {
+    webm: "https://media.novaatlastur.com/video/nova-atlas-film.webm",
+    mp4: "https://media.novaatlastur.com/video/nova-atlas-film.mp4",
+  },
 } as const;
 
 export type WaLocale = keyof typeof site.waMessage;

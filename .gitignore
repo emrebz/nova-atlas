@@ -14,3 +14,5 @@ npm-debug.log*
 # local editor / tooling
 .claude/
 graphify-out/
+# local dev video (hosted on R2 in prod)
+public/media/

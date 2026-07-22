@@ -9,7 +9,7 @@ export const tr = {
   meta: {
     title: "Nova Atlas Turizm | Çorlu Seyahat Acentesi",
     description:
-      "Çorlu merkezli Nova Atlas Turizm; yurt içi ve yurt dışı turlar, vize danışmanlığı, otel rezervasyonu ve güvenli seyahat planlamasında yanınızda.",
+      "Çorlu merkezli Nova Atlas Turizm; yurt içi ve yurt dışı turlar, otel rezervasyonu, VIP transfer ve güvenli seyahat planlamasında yanınızda.",
     ogLocale: "tr_TR",
   },
   nav: {
@@ -21,17 +21,31 @@ export const tr = {
     contact: { label: "İletişim", anchor: "iletisim" },
   },
   hero: {
-    h1: "Nova Atlas Turizm: Çorlu'dan Dünyaya Güvenli Yolculuklar",
-    sub: "Tur, vize, konaklama ve ulaşım ihtiyaçlarınız için Çorlu'da ulaşılabilir, güvenilir bir seyahat acentesi.",
-    lead: "Personel taşımacılığından gelen operasyon deneyimimizi bir aile şirketinin sorumluluk anlayışıyla turizme taşıyoruz. Çorlu çıkışlı yurt içi ve yurt dışı tur paketlerimiz hazırlanırken, seyahat planlarınız ve vize süreçleriniz için şimdiden bizimle iletişime geçebilirsiniz.",
+    h1: "Nova Atlas Turizm Seyahat Acentası",
+    brand: "Nova Atlas",
+    descriptor: "Turizm Seyahat Acentası",
+    sub: "Tur, konaklama ve ulaşım ihtiyaçlarınız için Çorlu'da ulaşılabilir, güvenilir bir seyahat acentesi.",
+    lead: "Personel taşımacılığından gelen operasyon deneyimimizi bir aile şirketinin sorumluluk anlayışıyla turizme taşıyoruz. Çorlu çıkışlı yurt içi ve yurt dışı tur paketlerimiz hazırlanırken seyahat planlarınız için şimdiden bizimle iletişime geçebilirsiniz.",
     cta: "WhatsApp'tan Bize Ulaşın",
+  },
+  film: {
+    regionLabel: "Nova Atlas Turizm tanıtım filmi",
+    tagline: "Çorlu'dan Dünyaya",
+    tapForSound: "Ses için dokunun",
+    unmute: "Sesi aç",
+    mute: "Sesi kapat",
+    play: "Oynat",
+    pause: "Duraklat",
+    fullscreen: "Tam ekran",
+    exitFullscreen: "Tam ekrandan çık",
+    scroll: "Keşfet",
   },
   about: {
     h2: "Çorlu'da Deneyimden Doğan Bir Seyahat Acentesi",
     paragraphs: [
       "Nova Atlas Turizm, Çorlu ve Tekirdağ bölgesindeki ulaşım ihtiyaçlarını yakından tanıyan bir aile şirketinin turizm markasıdır. Personel taşımacılığında edindiğimiz planlama, zaman yönetimi ve operasyon tecrübesini kendi araç filomuzla sunduğumuz seyahat ve ulaşım hizmetlerine aktarıyoruz.",
       "Amacımız yalnızca bir rezervasyon oluşturmak değil; yolculuğun her aşamasında ulaşılabilir bir muhatap olmak, seçenekleri açıkça anlatmak ve ihtiyaca uygun bir plan hazırlamaktır. Kurumsal disiplin ile aile şirketi sıcaklığını aynı hizmet anlayışında buluşturuyoruz.",
-      "Çorlu çıkışlı yurt içi ve yurt dışı turlar, vize danışmanlığı, otel rezervasyonu, personel taşımacılığı ve VIP transfer alanlarında büyüyen hizmet ağımızla yanınızdayız. Yaklaşan tur programlarını web sitemizden ve sosyal medya hesaplarımızdan duyuracağız.",
+      "Çorlu çıkışlı yurt içi ve yurt dışı turlar, otel rezervasyonu ve VIP transfer alanlarında büyüyen hizmet ağımızla yanınızdayız. Yaklaşan tur programlarını web sitemizden ve sosyal medya hesaplarımızdan duyuracağız.",
     ],
     whyTitle: "Neden Nova Atlas Turizm?",
     why: [
@@ -126,14 +140,13 @@ export const tr = {
   services: {
     h2: "Çorlu Merkezli Seyahat ve Ulaşım Hizmetleri",
     paragraphs: [
-      "Yurt içi ve yurt dışı seyahatlerinizi tek noktadan planlayabilmeniz için tur, vize, konaklama ve ulaşım ihtiyaçlarını birlikte değerlendiriyoruz.",
-      "Tur tarihleri ve paket detayları hazırlanırken vize danışmanlığı, otel rezervasyonu, personel taşımacılığı ve VIP transfer talepleriniz için bize WhatsApp üzerinden ulaşabilirsiniz.",
+      "Yurt içi ve yurt dışı seyahatlerinizi tek noktadan planlayabilmeniz için tur, konaklama ve ulaşım ihtiyaçlarını birlikte değerlendiriyoruz.",
+      "Tur tarihleri ve paket detayları hazırlanırken otel rezervasyonu ve VIP transfer talepleriniz için bize WhatsApp üzerinden ulaşabilirsiniz.",
     ],
     badge: "Yakında",
     items: [
       { icon: "compass", title: "Çorlu Çıkışlı Yurt İçi Turlar", desc: "Kültür, doğa ve günübirlik rota seçenekleri." },
       { icon: "globe", title: "Yurt Dışı Turları", desc: "Farklı bütçe ve seyahat beklentilerine uygun programlar." },
-      { icon: "passport", title: "Vize Danışmanlığı", desc: "Schengen, ABD, İngiltere, Mısır ve Dubai başvurularında evrak ve süreç desteği." },
       { icon: "bed", title: "Otel & Konaklama", desc: "Seyahat planınıza uygun konaklama seçenekleri." },
       { icon: "van", title: "Taşımacılık & VIP Transfer", desc: "Personel taşımacılığı deneyimine dayanan ulaşım çözümleri." },
     ],
@@ -143,19 +156,19 @@ export const tr = {
     meta: {
       title: "Çorlu VIP Transfer | Nova Atlas Turizm",
       description:
-        "Nova Atlas Turizm ile Vito ve A5 araç seçenekleriyle Çorlu–İstanbul Havalimanı, Çorlu–Sabiha Gökçen, özel rota, düğün ve özel gün transferleri.",
+        "Nova Atlas Turizm'in Vito aracıyla Çorlu–İstanbul Havalimanı, Çorlu–Sabiha Gökçen, özel rota, düğün ve özel gün transferleri.",
     },
     breadcrumb: "VIP Taşımacılık",
     eyebrow: "Çorlu çıkışlı özel ulaşım",
     h1: "VIP Transferinizi Rotanıza Göre Planlayalım",
     lead:
-      "Vito ve A5 araç seçeneklerimizle havalimanı yolculukları, özel rotalar, düğünler ve özel günler için ulaşım talebinizi birlikte planlıyoruz.",
+      "Vito aracımızla havalimanı yolculukları, özel rotalar, düğünler ve özel günler için ulaşım talebinizi birlikte planlıyoruz.",
     heroCta: "VIP Transfer Talebi Oluştur",
-    heroAlt: "VIP transfer için Vito ve A5 araç seçenekleri",
-    chips: ["Vito", "A5", "Çorlu çıkışlı planlama"],
+    heroAlt: "VIP transfer için Vito aracı",
+    chips: ["Vito", "Çorlu çıkışlı planlama"],
     servicesTitle: "İhtiyacınıza Uygun VIP Taşımacılık",
     servicesBody:
-      "Tarih, saat, kalkış ve varış noktanızı WhatsApp üzerinden iletin; rota ve araç tercihinizi talebinize göre netleştirelim.",
+      "Tarih, saat, kalkış ve varış noktanızı WhatsApp üzerinden iletin; rota ve yolculuk detaylarını talebinize göre netleştirelim.",
     services: [
       {
         icon: "plane",
@@ -179,7 +192,7 @@ export const tr = {
         desc: "Düğün, nişan, davet ve özel organizasyonlarınız için ulaşım ihtiyacınızı birlikte planlayalım.",
         cta: "Organizasyon için yaz",
         message:
-          "Merhaba, düğün/özel gün için VIP araç talebim var. Etkinlik türü: …, tarih: …, konum/rota: …, saat aralığı: …, araç tercihi: Vito / A5.",
+          "Merhaba, düğün/özel gün için VIP araç talebim var. Etkinlik türü: …, tarih: …, konum/rota: …, saat aralığı: …",
       },
       {
         icon: "route",
@@ -187,24 +200,18 @@ export const tr = {
         desc: "Belirlediğiniz kalkış ve varış noktaları için size özel ulaşım talebi oluşturun.",
         cta: "Özel rota oluştur",
         message:
-          "Merhaba, özel rota için VIP transfer talebi oluşturmak istiyorum. Kalkış: …, varış: …, tarih/saat: …, yolcu sayısı: …, araç tercihi: Vito / A5.",
+          "Merhaba, özel rota için VIP transfer talebi oluşturmak istiyorum. Kalkış: …, varış: …, tarih/saat: …, yolcu sayısı: …",
       },
     ],
-    vehiclesTitle: "Vito veya A5: Yolculuğunuza Uygun Seçenek",
+    vehiclesTitle: "VIP Yolculuklarınız İçin Vito",
     vehiclesBody:
-      "Yolcu sayınız, bagaj durumunuz ve yolculuk tercihinize göre araç seçimini birlikte netleştirebiliriz.",
+      "Yolcu sayınız, bagaj durumunuz ve yolculuk planınıza göre Vito ile transfer detaylarını birlikte netleştirebiliriz.",
     vehicles: [
       {
         icon: "van",
         name: "Vito",
-        kicker: "Geniş araç seçeneği",
+        kicker: "Geniş kabinli VIP araç",
         desc: "Birlikte seyahat eden misafirler ve bagajlı yolculuklar için geniş kabinli VIP transfer seçeneği.",
-      },
-      {
-        icon: "car",
-        name: "A5",
-        kicker: "Executive araç seçeneği",
-        desc: "Daha kompakt ve özel bir yolculuk tercih eden misafirler için executive transfer seçeneği.",
       },
     ],
     processTitle: "Talebinizi Üç Adımda İletin",
@@ -215,8 +222,8 @@ export const tr = {
         desc: "Tarih, saat, yolcu ve bagaj bilgilerinizi yazın.",
       },
       {
-        title: "Araç tercihinizi belirtin",
-        desc: "Vito veya A5 tercihinizi talebinize ekleyin.",
+        title: "Ek taleplerinizi paylaşın",
+        desc: "Yolculuğunuzla ilgili ek bilgileri talebinize ekleyin.",
       },
     ],
     ctaTitle: "VIP ulaşım talebinizi şimdi iletin",
@@ -224,14 +231,14 @@ export const tr = {
       "Havalimanı, özel rota veya organizasyon bilgilerinizi WhatsApp üzerinden gönderin; talebinizi birlikte netleştirelim.",
     cta: "WhatsApp'tan VIP Transfer Sor",
     generalMessage:
-      "Merhaba, Nova Atlas Turizm VIP taşımacılık hizmeti hakkında bilgi almak istiyorum. Rota: …, tarih/saat: …, yolcu sayısı: …, araç tercihi: Vito / A5.",
+      "Merhaba, Nova Atlas Turizm VIP taşımacılık hizmeti hakkında bilgi almak istiyorum. Rota: …, tarih/saat: …, yolcu sayısı: …",
     home: {
       eyebrow: "VIP Taşımacılık",
       title: "Çorlu'dan Havalimanına ve Özel Günlerinize VIP Ulaşım",
-      body: "Vito ve A5 araç seçeneklerimizle havalimanı transferlerinden size özel rotalara, düğünlerden özel organizasyonlara kadar ulaşım talebinizi birlikte planlayalım.",
+      body: "Vito aracımızla havalimanı transferlerinden size özel rotalara, düğünlerden özel organizasyonlara kadar ulaşım talebinizi birlikte planlayalım.",
       points: [
         "Çorlu – İstanbul Havalimanı ve Sabiha Gökçen",
-        "Vito ve A5 araç seçenekleri",
+        "Geniş kabinli Vito ile VIP ulaşım",
         "Özel rotalar, düğünler ve özel günler",
       ],
       cta: "VIP Taşımacılığı İncele",
@@ -251,7 +258,7 @@ export const tr = {
   },
   footer: {
     line: "Nova Atlas Turizm — Çorlu",
-    note: "Çorlu merkezli; tur, vize, konaklama ve ulaşım hizmetleri sunan TÜRSAB üyesi seyahat acentesi.",
+    note: "Çorlu merkezli; tur, konaklama ve ulaşım hizmetleri sunan TÜRSAB üyesi seyahat acentesi.",
     rights: "Tüm hakları saklıdır.",
   },
   a11y: {
