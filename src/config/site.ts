@@ -43,6 +43,11 @@ export const site = {
   servicesFilm: {
     mp4: "https://media.novaatlastur.com/video/hizmetler-hero.mp4",
   },
+  /** Theme-aware, silent logo films used in the About brand panel. */
+  logoAnimation: {
+    lightMp4: "https://media.novaatlastur.com/video/light-mode-animation.mp4",
+    darkMp4: "https://media.novaatlastur.com/video/dark-logo-animation.mp4",
+  },
 } as const;
 
 export type WaLocale = keyof typeof site.waMessage;

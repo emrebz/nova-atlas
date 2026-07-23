@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import { site } from "../config/site";
 import { useTranslations, asLocale } from "../i18n/utils";
 import Icon from "./Icon.astro";
 import Reveal from "./Reveal.astro";
@@ -27,16 +28,21 @@ const t = useTranslations(locale);
 
       <Reveal delay={120}>
         <figure
-          class="about-brand-panel rounded-3xl border p-8 sm:p-10"
+          class="about-brand-panel rounded-3xl border p-2"
         >
-          <div role="img" aria-label={t.about.logoAlt}>
+          <div
+            class="about-brand-media relative aspect-video overflow-hidden rounded-[1.35rem]"
+            role="img"
+            aria-label={t.about.logoAlt}
+            data-about-logo-media
+          >
             <Image
               src={logo}
               alt=""
               width={640}
               densities={[1, 2]}
               loading="lazy"
-              class="theme-logo-light mx-auto h-auto w-full max-w-md"
+              class="theme-logo-light absolute inset-0 h-full w-full object-contain p-6 sm:p-8"
             />
             <Image
               src={darkLogo}
@@ -44,10 +50,25 @@ const t = useTranslations(locale);
               widths={[480, 720, 960]}
               sizes="(min-width: 1024px) 36vw, (min-width: 640px) 32rem, calc(100vw - 6rem)"
               loading="lazy"
-              class="theme-logo-dark mx-auto h-auto w-full max-w-lg rounded-2xl"
+              class="theme-logo-dark absolute inset-0 h-full w-full object-cover"
             />
+            <video
+              class="about-logo-video pointer-events-none absolute inset-0 h-full w-full object-cover"
+              data-about-logo-video
+              data-light-src={site.logoAnimation.lightMp4}
+              data-dark-src={site.logoAnimation.darkMp4}
+              autoplay
+              muted
+              loop
+              playsinline
+              webkit-playsinline
+              preload="none"
+              disablepictureinpicture
+              tabindex="-1"
+              aria-hidden="true"
+            ></video>
           </div>
-          <figcaption class="mt-4 flex items-center justify-center gap-2 text-sm font-medium text-muted">
+          <figcaption class="mt-4 flex items-center justify-center gap-2 px-4 pb-3 text-sm font-medium text-muted">
             <Image
               src={tursabLogo}
               alt=""
@@ -103,6 +124,15 @@ const t = useTranslations(locale);
     display: none;
   }
 
+  .about-logo-video {
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .about-logo-video.is-playing {
+    opacity: 1;
+  }
+
   :global(html[data-theme="dark"]) .theme-logo-light {
     display: none;
   }
@@ -112,7 +142,6 @@ const t = useTranslations(locale);
   }
 
   :global(html[data-theme="dark"]) .about-brand-panel {
-    padding: 0.75rem 0.75rem 1.5rem;
     background: linear-gradient(145deg, #111c36 0%, #070d1a 100%);
     border-color: rgb(227 200 138 / 0.38);
     box-shadow:
@@ -121,4 +150,93 @@ const t = useTranslations(locale);
       0 24px 60px -22px rgb(0 0 0 / 0.7),
       0 0 42px rgb(195 154 62 / 0.07);
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .about-logo-video {
+      display: none;
+    }
+  }
 </style>
+
+<script>
+  const aboutLogoMedia = document.querySelector<HTMLElement>(
+    "[data-about-logo-media]"
+  );
+  const aboutLogoVideo = aboutLogoMedia?.querySelector<HTMLVideoElement>(
+    "[data-about-logo-video]"
+  );
+
+  if (aboutLogoMedia && aboutLogoVideo) {
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    let isVisible = false;
+    let activeSource = "";
+
+    aboutLogoVideo.defaultMuted = true;
+    aboutLogoVideo.muted = true;
+    aboutLogoVideo.volume = 0;
+
+    const attemptPlayback = () => {
+      if (reduceMotion || !isVisible || document.hidden) return;
+      aboutLogoVideo.muted = true;
+      aboutLogoVideo.play().catch(() => {
+        // This is a decorative, non-interactive film. If a browser blocks
+        // autoplay, the theme-matched static logo remains visible underneath.
+      });
+    };
+
+    const syncThemeSource = () => {
+      const dark = document.documentElement.dataset.theme === "dark";
+      const nextSource = dark
+        ? aboutLogoVideo.dataset.darkSrc
+        : aboutLogoVideo.dataset.lightSrc;
+      if (!nextSource || nextSource === activeSource) {
+        attemptPlayback();
+        return;
+      }
+
+      activeSource = nextSource;
+      aboutLogoVideo.pause();
+      aboutLogoVideo.classList.remove("is-playing");
+      aboutLogoVideo.src = nextSource;
+      aboutLogoVideo.load();
+      attemptPlayback();
+    };
+
+    aboutLogoVideo.addEventListener("playing", () => {
+      aboutLogoVideo.classList.add("is-playing");
+    });
+    aboutLogoVideo.addEventListener("loadeddata", attemptPlayback);
+    aboutLogoVideo.addEventListener("canplay", attemptPlayback);
+
+    new MutationObserver(syncThemeSource).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(
+        ([entry]) => {
+          isVisible = entry.isIntersecting;
+          if (isVisible) {
+            syncThemeSource();
+          } else {
+            aboutLogoVideo.pause();
+          }
+        },
+        { threshold: 0.15 }
+      ).observe(aboutLogoMedia);
+    } else {
+      isVisible = true;
+      syncThemeSource();
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) aboutLogoVideo.pause();
+      else attemptPlayback();
+    });
+
+    syncThemeSource();
+  }
+</script>
