@@ -3,14 +3,18 @@ import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
+import cloudflare from "@astrojs/cloudflare";
+
 export default defineConfig({
   site: "https://novaatlastur.com",
   output: "static",
+
   i18n: {
     defaultLocale: "tr",
     locales: ["tr", "en"],
     routing: { prefixDefaultLocale: false },
   },
+
   integrations: [
     sitemap({
       i18n: {
@@ -19,7 +23,10 @@ export default defineConfig({
       },
     }),
   ],
+
   vite: {
     plugins: [tailwindcss()],
   },
+
+  adapter: cloudflare()
 });

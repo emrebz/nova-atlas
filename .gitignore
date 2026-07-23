@@ -16,3 +16,9 @@ npm-debug.log*
 graphify-out/
 # local dev video (hosted on R2 in prod)
 public/media/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
