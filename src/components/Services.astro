@@ -6,6 +6,7 @@ import Reveal from "./Reveal.astro";
 
 const locale = asLocale(Astro.currentLocale);
 const t = useTranslations(locale);
+const detailsHref = locale === "tr" ? "/hizmetler/" : "/en/services/";
 ---
 
 <section id={t.nav.services.anchor} class="bg-surface-2 py-16 md:py-28 lg:py-32">
@@ -44,16 +45,25 @@ const t = useTranslations(locale);
       }
     </ul>
 
-    <Reveal class="mt-12 text-center">
-      <a
-        href={waUrl(locale)}
-        target="_blank"
-        rel="noopener"
-        class="inline-flex min-h-12 items-center gap-2.5 rounded-full bg-wa-strong px-7 py-3.5 font-semibold text-white shadow-[0_10px_28px_rgb(21_128_61/0.3)] transition-transform duration-200 hover:scale-[1.03] hover:bg-wa-deep active:scale-[0.99]"
-      >
-        <Icon name="whatsapp" class="h-5 w-5" />
-        {t.services.cta}
-      </a>
+    <Reveal class="mt-12">
+      <div class="flex flex-wrap justify-center gap-3">
+        <a
+          href={detailsHref}
+          class="inline-flex min-h-12 items-center gap-2.5 rounded-full bg-primary px-7 py-3.5 font-semibold text-white shadow-[0_10px_28px_rgb(11_18_38/0.2)] transition-transform duration-200 hover:scale-[1.03] hover:bg-primary-soft active:scale-[0.99]"
+        >
+          {t.services.detailsCta}
+          <Icon name="arrow-right" class="h-4.5 w-4.5" />
+        </a>
+        <a
+          href={waUrl(locale)}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex min-h-12 items-center gap-2.5 rounded-full bg-wa-strong px-7 py-3.5 font-semibold text-white shadow-[0_10px_28px_rgb(21_128_61/0.3)] transition-transform duration-200 hover:scale-[1.03] hover:bg-wa-deep active:scale-[0.99]"
+        >
+          <Icon name="whatsapp" class="h-5 w-5" />
+          {t.services.cta}
+        </a>
+      </div>
     </Reveal>
   </div>
 </section>

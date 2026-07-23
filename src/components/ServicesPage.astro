@@ -1,0 +1,350 @@
+---
+import { getImage, Image } from "astro:assets";
+import domesticImage from "../assets/services/domestic-tours.png";
+import hotelImage from "../assets/services/hotel-accommodation.png";
+import internationalImage from "../assets/services/international-tours.png";
+import servicesPosterSrc from "../assets/services/services-hero-poster.jpg";
+import vipImage from "../assets/services/vip-transport.png";
+import { site, waUrl } from "../config/site";
+import { asLocale, localeHome, useTranslations } from "../i18n/utils";
+import Icon from "./Icon.astro";
+import Reveal from "./Reveal.astro";
+
+const locale = asLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+const page = t.services.page;
+const home = localeHome(locale);
+const serviceImages = [domesticImage, internationalImage, hotelImage, vipImage];
+const serviceWa = (message: string) =>
+  `https://wa.me/${site.phoneRaw}?text=${encodeURIComponent(message)}`;
+const servicesPoster = await getImage({
+  src: servicesPosterSrc,
+  width: 1280,
+  height: 720,
+  format: "webp",
+  quality: 78,
+});
+---
+
+<article>
+  <header class="services-hero relative isolate overflow-hidden bg-primary-deep text-white">
+    <div class="pointer-events-none absolute inset-0">
+      <video
+        id="services-hero-video"
+        class="services-hero-video h-full w-full object-cover"
+        poster={servicesPoster.src}
+        autoplay
+        muted
+        loop
+        playsinline
+        webkit-playsinline
+        preload="auto"
+        disablepictureinpicture
+        tabindex="-1"
+        aria-hidden="true"
+      >
+        <source src={site.servicesFilm.mp4} type="video/mp4" />
+      </video>
+      <div class="services-hero-scrim absolute inset-0"></div>
+      <div class="services-hero-glow absolute inset-0"></div>
+      <button
+        id="services-hero-play"
+        type="button"
+        class="pointer-events-auto absolute right-5 bottom-5 z-30 inline-flex min-h-12 items-center gap-2 rounded-full border border-white/25 bg-black/45 px-5 py-3 text-sm font-semibold text-white shadow-lg backdrop-blur-md transition hover:border-white/50 hover:bg-black/60 md:right-8 md:bottom-8"
+        aria-label={t.film.play}
+        hidden
+      >
+        <Icon name="play" class="h-4.5 w-4.5" />
+        {t.film.play}
+      </button>
+    </div>
+    <div
+      class="container-site relative flex min-h-[58svh] flex-col justify-center pt-[calc(var(--header-h)+3rem)] pb-16 md:min-h-[64svh] md:pb-20"
+    >
+      <div class="max-w-4xl">
+        <nav aria-label="Breadcrumb" class="mb-6 text-sm font-medium text-white/70">
+          <ol class="flex items-center gap-2">
+            <li>
+              <a href={home} class="rounded transition hover:text-accent-soft">
+                {t.nav.home.label}
+              </a>
+            </li>
+            <li aria-hidden="true" class="text-white/35">/</li>
+            <li aria-current="page" class="text-white">{page.breadcrumb}</li>
+          </ol>
+        </nav>
+
+        <p class="inline-flex items-center gap-2 text-sm font-semibold tracking-[0.14em] text-accent-soft uppercase">
+          <Icon name="sparkle" class="h-4.5 w-4.5" />
+          {page.eyebrow}
+        </p>
+        <h1
+          class="font-display mt-4 max-w-4xl text-[clamp(2.5rem,6vw,4.75rem)] leading-[0.98] font-bold tracking-[-0.035em]"
+        >
+          {page.h1}
+        </h1>
+        <p class="mt-6 max-w-2xl text-lg leading-relaxed text-white/75 md:text-xl">
+          {page.lead}
+        </p>
+        <span class="mt-8 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-4 py-2 text-sm font-semibold text-white/90">
+          <Icon name="compass" class="h-4 w-4 text-accent-soft" />
+          {page.items.length} {page.countSuffix}
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <section class="bg-surface py-16 md:py-24" aria-labelledby="services-list-title">
+    <div class="container-site">
+      <Reveal class="mx-auto max-w-3xl text-center">
+        <p class="text-sm font-semibold tracking-[0.14em] text-accent-strong uppercase">
+          {page.introEyebrow}
+        </p>
+        <h2
+          id="services-list-title"
+          class="font-display mt-3 text-3xl font-bold tracking-tight text-heading md:text-5xl"
+        >
+          {page.introTitle}
+        </h2>
+        <p class="mt-5 text-lg leading-relaxed text-muted">{page.introBody}</p>
+      </Reveal>
+
+      <ol class="mt-12 space-y-8 md:mt-16 md:space-y-12">
+        {
+          page.items.map((item, index) => (
+            <Reveal as="li">
+              <article class="service-card grid overflow-hidden rounded-[2rem] border border-line bg-surface-2 shadow-[0_16px_48px_rgb(11_18_38/0.08)] lg:grid-cols-2">
+                <figure
+                  class:list={[
+                    "service-image relative min-h-64 overflow-hidden sm:min-h-80 lg:min-h-[30rem]",
+                    index % 2 === 1 && "lg:order-2",
+                  ]}
+                >
+                  <Image
+                    src={serviceImages[index]}
+                    alt={item.imageAlt}
+                    widths={[640, 960, 1280]}
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    loading="lazy"
+                    class="absolute inset-0 h-full w-full object-cover"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-primary-deep/35 via-transparent to-transparent" aria-hidden="true"></div>
+                  <span class="font-display absolute bottom-5 left-5 grid size-12 place-items-center rounded-full border border-white/20 bg-primary-deep/70 text-sm font-bold text-accent-soft backdrop-blur-md">
+                    0{index + 1}
+                  </span>
+                </figure>
+
+                <div
+                  class:list={[
+                    "flex flex-col justify-center p-7 sm:p-10 lg:p-12",
+                    index % 2 === 1 && "lg:order-1",
+                  ]}
+                >
+                  <span class="grid size-13 place-items-center rounded-2xl bg-primary text-accent-soft shadow-[0_10px_24px_rgb(11_18_38/0.15)]">
+                    <Icon name={item.icon} class="h-6.5 w-6.5" />
+                  </span>
+                  <h2 class="font-display mt-6 text-3xl font-bold tracking-tight text-heading md:text-4xl">
+                    {item.title}
+                  </h2>
+                  <p class="mt-4 leading-relaxed text-muted md:text-lg">{item.body}</p>
+
+                  <ul class="mt-6 space-y-3">
+                    {item.bullets.map((bullet) => (
+                      <li class="flex items-start gap-3 text-ink">
+                        <span class="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-accent/15 text-accent-strong">
+                          <Icon name="check" class="h-4 w-4" />
+                        </span>
+                        <span class="leading-relaxed">{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <a
+                    href={serviceWa(item.message)}
+                    target="_blank"
+                    rel="noopener"
+                    class="mt-8 inline-flex min-h-12 w-fit items-center gap-2.5 rounded-full bg-wa-strong px-6 py-3.5 font-semibold text-white transition duration-200 hover:scale-[1.02] hover:bg-wa-deep"
+                  >
+                    <Icon name="whatsapp" class="h-5 w-5" />
+                    {page.itemCta}
+                  </a>
+                </div>
+              </article>
+            </Reveal>
+          ))
+        }
+      </ol>
+
+      <Reveal>
+        <div class="mt-16 flex flex-col items-start justify-between gap-7 rounded-[2rem] bg-primary p-7 text-white shadow-[0_24px_60px_rgb(11_18_38/0.16)] md:p-12 lg:flex-row lg:items-center">
+          <div class="max-w-2xl">
+            <h2 class="font-display text-3xl font-bold tracking-tight md:text-4xl">
+              {page.ctaTitle}
+            </h2>
+            <p class="mt-3 leading-relaxed text-white/75">{page.ctaBody}</p>
+          </div>
+          <a
+            href={waUrl(locale)}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex min-h-13 shrink-0 items-center gap-2.5 rounded-full bg-wa-strong px-7 py-3.5 font-semibold text-white transition duration-200 hover:scale-[1.02] hover:bg-wa-deep"
+          >
+            <Icon name="whatsapp" class="h-5 w-5" />
+            {page.cta}
+          </a>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+</article>
+
+<style>
+  .services-hero-video {
+    opacity: 0.76;
+    transition: opacity 0.6s ease;
+  }
+
+  .services-hero-video.is-loop-fading {
+    opacity: 0;
+  }
+
+  .services-hero-scrim {
+    background:
+      linear-gradient(
+        90deg,
+        rgb(5 10 24 / 0.88) 0%,
+        rgb(5 10 24 / 0.68) 54%,
+        rgb(5 10 24 / 0.4) 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgb(5 10 24 / 0.35) 0%,
+        transparent 42%,
+        rgb(5 10 24 / 0.68) 100%
+      );
+  }
+
+  .services-hero-glow {
+    background:
+      radial-gradient(680px 430px at 82% 12%, rgb(195 154 62 / 0.19), transparent 68%),
+      radial-gradient(820px 520px at 8% 110%, rgb(42 55 96 / 0.7), transparent 72%),
+      linear-gradient(145deg, transparent 52%, rgb(255 255 255 / 0.035) 52.2%, transparent 52.4%);
+  }
+
+  .service-image :global(img) {
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .service-card:hover .service-image :global(img) {
+    transform: scale(1.025);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .services-hero-video {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const servicesVideo = document.getElementById(
+    "services-hero-video"
+  ) as HTMLVideoElement | null;
+  const servicesPlayButton = document.getElementById(
+    "services-hero-play"
+  ) as HTMLButtonElement | null;
+
+  if (servicesVideo && servicesPlayButton) {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const saveData = (navigator as any).connection?.saveData === true;
+    const automaticPlayback = !reduce && !saveData;
+    let userStarted = false;
+    let fading = false;
+    let shouldPlay = true;
+
+    // Safari evaluates muted autoplay against the DOM property as well as the
+    // HTML attribute. Set both before every play attempt.
+    servicesVideo.defaultMuted = true;
+    servicesVideo.muted = true;
+
+    const attemptPlayback = () => {
+      if (!shouldPlay || !servicesVideo.paused) return;
+      servicesVideo.muted = true;
+      servicesVideo.play().then(
+        () => {
+          servicesPlayButton.hidden = true;
+        },
+        (error: DOMException) => {
+          // Safari rejects autoplay with NotAllowedError when the browser's
+          // per-site setting, Low Power Mode, or motion preference requires a
+          // user gesture. Keep the decorative video non-interactive normally;
+          // expose a compact control only in that blocked state.
+          if (error?.name === "NotAllowedError") {
+            servicesPlayButton.hidden = false;
+          }
+        }
+      );
+    };
+
+    const syncLoopFade = () => {
+      if (!Number.isFinite(servicesVideo.duration) || servicesVideo.duration <= 0) return;
+
+      const fadeWindow = Math.min(0.7, servicesVideo.duration * 0.12);
+      const nearEnd =
+        servicesVideo.currentTime > fadeWindow &&
+        servicesVideo.duration - servicesVideo.currentTime <= fadeWindow;
+      const restarted = servicesVideo.currentTime < Math.min(0.4, fadeWindow);
+
+      if (nearEnd && !fading) {
+        fading = true;
+        servicesVideo.classList.add("is-loop-fading");
+      } else if (restarted && fading) {
+        fading = false;
+        servicesVideo.classList.remove("is-loop-fading");
+      }
+    };
+
+    servicesVideo.addEventListener("timeupdate", syncLoopFade);
+    servicesVideo.addEventListener("seeked", syncLoopFade);
+    servicesVideo.addEventListener("loadeddata", () => {
+      if (automaticPlayback || userStarted) attemptPlayback();
+    });
+    servicesVideo.addEventListener("canplay", () => {
+      if (automaticPlayback || userStarted) attemptPlayback();
+    });
+    servicesVideo.addEventListener("playing", () => {
+      servicesPlayButton.hidden = true;
+    });
+
+    if (automaticPlayback) {
+      attemptPlayback();
+    } else {
+      servicesVideo.pause();
+      servicesVideo.preload = "none";
+      servicesPlayButton.hidden = false;
+    }
+
+    servicesPlayButton.addEventListener("click", () => {
+      userStarted = true;
+      shouldPlay = true;
+      servicesVideo.preload = "auto";
+      servicesPlayButton.hidden = true;
+      attemptPlayback();
+    });
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            shouldPlay = true;
+            if (automaticPlayback || userStarted) attemptPlayback();
+          } else {
+            shouldPlay = false;
+            servicesVideo.pause();
+          }
+        },
+        { threshold: 0.1 }
+      ).observe(servicesVideo);
+    }
+  }
+</script>

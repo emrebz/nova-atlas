@@ -1,0 +1,47 @@
+---
+import ServicesPage from "../../../components/ServicesPage.astro";
+import { site } from "../../../config/site";
+import { useTranslations } from "../../../i18n/utils";
+import Base from "../../../layouts/Base.astro";
+
+const locale = "en" as const;
+const t = useTranslations(locale);
+const page = t.services.page;
+const alternates = { tr: "/hizmetler/", en: "/en/services/" };
+const pageUrl = new URL(alternates.en, site.url).href;
+
+const breadcrumb = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: t.nav.home.label, item: `${site.url}/en/` },
+    { "@type": "ListItem", position: 2, name: page.breadcrumb, item: pageUrl },
+  ],
+};
+
+const itemList = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: page.h1,
+  numberOfItems: page.items.length,
+  itemListElement: page.items.map((item, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    item: {
+      "@type": "Service",
+      name: item.title,
+      description: item.body,
+      provider: { "@id": `${site.url}/#organization` },
+    },
+  })),
+};
+---
+
+<Base
+  title={page.meta.title}
+  description={page.meta.description}
+  alternates={alternates}
+  extraSchema={[breadcrumb, itemList]}
+>
+  <ServicesPage />
+</Base>

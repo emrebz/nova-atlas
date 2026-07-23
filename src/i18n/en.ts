@@ -147,7 +147,88 @@ export const en: Dictionary = {
       { icon: "bed", title: "Hotels & Accommodation", desc: "Accommodation options suited to your travel plans." },
       { icon: "van", title: "Transport & VIP Transfer", desc: "Transport solutions backed by employee transportation experience." },
     ],
+    detailsCta: "Explore in Detail",
     cta: "Message Us on WhatsApp",
+    page: {
+      meta: {
+        title: "Travel and Transport Services | Nova Atlas Turizm",
+        description:
+          "Explore Nova Atlas Travel's domestic and international tours from Çorlu, hotel reservations and VIP transfers with a Vito.",
+      },
+      breadcrumb: "Services",
+      eyebrow: "Travel planning based in Çorlu",
+      h1: "Let's Plan Your Journey Around Your Needs",
+      lead:
+        "Explore our services in one place, from tour options and accommodation to airport transfers and special-occasion transport.",
+      countSuffix: "service areas",
+      introEyebrow: "Our service areas",
+      introTitle: "Clear, Approachable Support for Every Journey",
+      introBody:
+        "We listen to your needs, explain the available options clearly and clarify the journey details together with you.",
+      itemCta: "Ask on WhatsApp",
+      items: [
+        {
+          icon: "compass",
+          title: "Domestic Tours from Çorlu",
+          body:
+            "We present domestic route options focused on culture, nature and relaxation through sample programmes departing from Çorlu. Once programmes are confirmed, we clearly share dates, meeting points, accommodation and itinerary details.",
+          bullets: [
+            "Cultural, nature and day-trip route alternatives",
+            "Joint review of programme, transport and accommodation options",
+            "Clear updates once exact dates and pricing are confirmed",
+          ],
+          imageAlt: "Domestic tour guests walking through an Anatolian valley",
+          message:
+            "Hello, I'd like information about domestic tour options departing from Çorlu and the programmes being planned.",
+        },
+        {
+          icon: "globe",
+          title: "International Tours",
+          body:
+            "We are working on international tour programmes for different budgets and travel expectations. When routes, transport and accommodation are confirmed, we explain the programme content and participation details clearly.",
+          bullets: [
+            "Programme research for different travel expectations",
+            "Joint review of transport and accommodation options",
+            "Date and itinerary updates once programmes are confirmed",
+          ],
+          imageAlt: "Travellers walking with luggage through an international airport",
+          message:
+            "Hello, I'd like information about the international tour programmes currently being prepared.",
+        },
+        {
+          icon: "bed",
+          title: "Hotels & Accommodation",
+          body:
+            "We help you evaluate accommodation options for a tour or an individual journey according to your dates, destination, number of guests and expectations.",
+          bullets: [
+            "Options suited to your travel dates and destination",
+            "Review based on guest count and accommodation expectations",
+            "Clear sharing of conditions before reservation",
+          ],
+          imageAlt: "Bright boutique hotel room with warm wooden details",
+          message:
+            "Hello, I'd like information about hotel and accommodation options. Destination: …, dates: …, guests: …",
+        },
+        {
+          icon: "van",
+          title: "Transport & VIP Transfer",
+          body:
+            "With our Vito, we plan transport requests for Çorlu–Istanbul Airport, Çorlu–Sabiha Gökçen, custom routes, weddings and special occasions.",
+          bullets: [
+            "Airport transfers departing from Çorlu",
+            "Custom departure and destination routes",
+            "Transport for weddings, events and special occasions",
+          ],
+          imageAlt: "Black VIP transfer vehicle parked outside an airport",
+          message:
+            "Hello, I'd like information about VIP transfers with a Vito. Route: …, date/time: …, passengers: …",
+        },
+      ],
+      ctaTitle: "Let's clarify which service fits your needs",
+      ctaBody:
+        "Share your travel plan, preferred dates or transport route on WhatsApp and we will respond with suitable options.",
+      cta: "Contact Us on WhatsApp",
+    },
   },
   vip: {
     meta: {
@@ -203,6 +284,7 @@ export const en: Dictionary = {
     vehiclesTitle: "Vito for Your VIP Journeys",
     vehiclesBody:
       "We can plan the transfer details with our Vito according to your passenger count, luggage and journey needs.",
+    videoLabel: "Vito showcase video",
     vehicles: [
       {
         icon: "van",

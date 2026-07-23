@@ -38,6 +38,7 @@ vehicle fleet. It is a TÜRSAB member agency.
 | Images     | `astro:assets` `<Image>` (sharp → WebP at build)    |
 | Sitemap    | `@astrojs/sitemap` with i18n config                 |
 | Host       | Cloudflare Pages (build `npm run build`, dir `dist`)|
+| Video      | Self-hosted on Cloudflare R2 (`media.novaatlastur.com`); `ffmpeg` transcodes masters to MP4/WebM (see §12) |
 | JavaScript | No framework islands. Small vanilla `<script>` tags |
 
 ### Commands
@@ -77,6 +78,7 @@ src/
   components/
     Header.astro          # fixed header, scrolled state, mobile menu, lang switch
     Hero.astro            # homepage hero: star-sky, brand plaques, CTA
+    BrandFilmHero.astro   # homepage top: full-bleed 16:9 autoplay brand film
     FeaturedTours.astro   # homepage tour carousel (auto-drift + controls)
     About.astro           # company story, TÜRSAB badge, "why us" cards
     Services.astro        # service cards
@@ -91,6 +93,7 @@ src/
     Icon.astro            # inline SVG icon set (stroke + brand fills)
     Wordmark.astro        # SVG-crisp header/footer brand lockup
     ThemeToggle.astro     # light/dark toggle button (logic in Base.astro)
+    VideoPlayer.astro     # reusable contained video (autoplay/unmute/fullscreen)
   pages/
     index.astro                    # TR home        → /
     en/index.astro                 # EN home        → /en/
@@ -102,8 +105,10 @@ src/
     en/vip-transfer/index.astro    # EN VIP transfer
   assets/                 # source images (optimized by astro:assets at build)
     tours/*.png           # tour photos (1586×992 source)
-    routes/, vip/         # page hero photos
+    routes/, vip/         # page hero photos + video posters (vito-poster.jpg)
+    media/                # brand-film poster
 public/                   # favicon.svg, og-image.jpg, robots.txt
+                          #   media/ = gitignored local-dev video (prod → R2, §12)
 docs/logo/                # brand source files (nova-atlas-no-bg.png = current)
 ```
 
@@ -299,7 +304,54 @@ Handled centrally in `Base.astro`; per-page via props:
 
 ---
 
-## 12. Known Gotchas (cost real debugging time)
+## 12. Video & Media
+
+Two videos ship: the homepage **brand film** (16:9, autoplays at the very top,
+`BrandFilmHero.astro`) and the vertical **Vito showcase** (9:16) on the VIP page
+(`VideoPlayer.astro`). Both are AI-generated, transcoded locally with `ffmpeg`
+(ProRes/MOV master → web MP4 H.264 + WebM VP9 + a poster still), and **hosted
+off the repo**.
+
+**Hosting — Cloudflare R2, never Git.** Video binaries exceed the Pages 25 MB
+per-file limit and bloat the repo. They live in an R2 bucket served from
+`https://media.novaatlastur.com/video/…` (custom domain, free egress). The URLs
+are the single source of truth in `site.ts`: `brandFilm` (webm+mp4) and
+`vipVideo` (mp4). **Posters are small and DO ship** in the repo
+(`src/assets/media/`, `src/assets/vip/`, optimized via `getImage()`).
+`public/media/` is a **gitignored** local-dev copy (works in `npm run dev`,
+never deployed) — production must point at R2.
+
+**Components.**
+
+- `BrandFilmHero.astro` — full-bleed 16:9 hero at the very top of the homepage;
+  autoplays immediately (above the fold). Bespoke overlay (tagline, scroll cue,
+  controls); the fixed header floats over it.
+- `VideoPlayer.astro` — reusable, contained, aspect-configurable player
+  (`aspect="9 / 16"` for Vito). Multi-instance safe: it wires every
+  `[data-video-player]` and queries only within its own root. Reuse it for any
+  new video — pass `mp4` / `webm?` / `poster` (a `getImage().src`) / `label` /
+  `labels` (control labels from `t.film.*`).
+
+**Behaviour (the spec, identical for both):** muted + `playsinline` + `loop`
+autoplay; **tap the video to unmute**; mute + fullscreen buttons (icons swap in
+JS / via `:global()` — see gotcha #7); a center play button appears if autoplay
+is blocked. **Mobile & perf best-practices:** `Save-Data` and
+`prefers-reduced-motion` → no autoplay, show poster + play button; pause when
+scrolled off-screen; `VideoPlayer` autoplays **lazily** (only once it scrolls
+into view, since it is below the fold), while the above-fold `BrandFilmHero`
+starts on load. A muted-autoplay video hero still scores green (homepage P92,
+VIP P95) because the poster/H1 is the LCP, not the video.
+
+**Adding a video:** transcode with `ffmpeg` (`-movflags +faststart`, H.264
+`-crf 24`, VP9 `-crf 34`), extract a poster frame, upload the video to R2 under
+`/video/`, commit the poster to `src/assets/`, add the URL to `site.ts`, and
+render `<VideoPlayer …>` (or, for a full-bleed hero, follow `BrandFilmHero`).
+AI video can't render brand text/logos cleanly — overlay those in the editor,
+never ask the model.
+
+---
+
+## 13. Known Gotchas (cost real debugging time)
 
 1. **`backdrop-filter` creates a containing block for `position: fixed`
    descendants.** The scrolled-header blur once clipped the fixed mobile menu
@@ -318,23 +370,32 @@ Handled centrally in `Base.astro`; per-page via props:
    (not flex `gap` between sets) so one set's width equals exactly one
    animation period — otherwise the loop jumps by half the gap.
 6. The in-app browser preview pane cannot capture screenshots at scrolled
-   positions or fire scroll/IO events programmatically. Verify scroll-driven
-   behavior with a tall viewport at `scrollY 0`, computed styles, or a real
-   browser — white captures there are a tool artifact, not a site bug.
+   positions or fire scroll/IO events programmatically, and it **blocks video
+   playback entirely** (autoplay and gesture). Verify scroll-driven behavior
+   with a tall viewport at `scrollY 0`, computed styles, or a real browser —
+   white captures and a stuck video poster there are tool artifacts, not bugs.
+7. **Scoped CSS never reaches child-component elements.** Astro scopes a
+   component's `<style>` to its own markup; a class on an element rendered by a
+   child component (e.g. the SVGs from `Icon.astro`) is not matched. State-driven
+   icon swaps must wrap the descendant in `:global()`
+   (`.vp[data-sound="on"] :global(.vp-ic-muted)`) or the icon never toggles.
 
 ---
 
-## 13. Deployment (Cloudflare Pages)
+## 14. Deployment (Cloudflare Pages)
 
 1. Push to Git → Cloudflare Pages → Connect to Git.
 2. Framework preset **Astro**, build `npm run build`, output `dist`.
 3. Custom domain `novaatlastur.com`.
 4. Email: Cloudflare Email Routing forwards `info@novaatlastur.com` once the
    domain is live (target inbox configured in the dashboard).
+5. Video: upload the transcoded files to the R2 bucket under `/video/` (public
+   via the `media.novaatlastur.com` custom domain); the URLs are already set in
+   `src/config/site.ts`. `public/media/` is dev-only and never deployed.
 
 ---
 
-## 14. Feature History (what exists and why)
+## 15. Feature History (what exists and why)
 
 - **v1 — Landing site:** bilingual one-pager (hero, about, services, contact),
   CSS/SVG star-sky hero, typed i18n dictionaries, WhatsApp-only conversion,
@@ -358,10 +419,15 @@ Handled centrally in `Base.astro`; per-page via props:
 - **Brand seal:** transparent logo adopted; elegant cream/gold plaque on the
   desktop hero (float + halo + star flourish), matching About panel, compact
   centered seal under the mobile H1.
+- **Video:** homepage brand-film hero (`BrandFilmHero`, 16:9, autoplay-muted,
+  tap-to-unmute, fullscreen) and a reusable `VideoPlayer` powering the vertical
+  9:16 Vito showcase on the VIP page (split on desktop, stacked heading → video
+  → cards on mobile, lazy autoplay). Videos on Cloudflare R2; posters in-repo;
+  `ffmpeg` transcodes the masters. (See §12.)
 
 ---
 
-## 15. Pre-Merge Checklist
+## 16. Pre-Merge Checklist
 
 - [ ] `npm run build` — zero errors, expected page count.
 - [ ] New copy exists in **both** `tr.ts` and `en.ts` (types enforce keys, not
@@ -371,4 +437,7 @@ Handled centrally in `Base.astro`; per-page via props:
 - [ ] Both themes checked (`data-theme="light"` / `"dark"`), text ≥4.5:1.
 - [ ] Images: `src/assets/` + `<Image>` with width/`widths`; lazy below fold.
 - [ ] Reduced-motion behavior intact for any new animation.
+- [ ] New video: hosted on R2 (not committed), poster in `src/assets/`, URL in
+      `site.ts`; muted + `playsinline`, reduced-motion / Save-Data fallback,
+      lazy autoplay if below the fold.
 - [ ] Lighthouse (mobile) still ~≥91 perf and 100/100/100 elsewhere; CLS 0.

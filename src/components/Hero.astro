@@ -4,6 +4,7 @@ import { site, waUrl } from "../config/site";
 import { useTranslations, asLocale } from "../i18n/utils";
 import Icon from "./Icon.astro";
 import novaAtlasLogo from "../../docs/logo/nova-atlas-no-bg.png";
+import novaAtlasDarkLogo from "../../docs/logo/nova-atlas-dark-mode.png";
 
 const locale = asLocale(Astro.currentLocale);
 const t = useTranslations(locale);
@@ -117,7 +118,15 @@ const t = useTranslations(locale);
           widths={[240, 360]}
           sizes="176px"
           loading="eager"
-          class="h-auto w-44"
+          class="theme-logo-light h-auto w-44"
+        />
+        <Image
+          src={novaAtlasDarkLogo}
+          alt=""
+          widths={[320, 480, 640]}
+          sizes="min(19rem, calc(100vw - 4rem))"
+          loading="eager"
+          class="theme-logo-dark h-auto w-[19rem] max-w-full rounded-xl"
         />
       </figure>
 
@@ -142,8 +151,7 @@ const t = useTranslations(locale);
       </div>
     </div>
 
-    <!-- Brand seal — the logo's navy wordmark needs a light surface, so it
-         rests on a warm cream plaque that lifts off the midnight hero. -->
+    <!-- Theme-aware brand seal: cream in light mode, midnight in dark mode. -->
     <div
       class="relative hidden items-center justify-center lg:flex"
       aria-hidden="true"
@@ -174,12 +182,21 @@ const t = useTranslations(locale);
             sizes="(min-width: 1280px) 30rem, 40vw"
             loading="lazy"
             decoding="async"
-            class="relative mx-auto h-auto w-full"
+            class="theme-logo-light relative mx-auto h-auto w-full"
+          />
+          <Image
+            src={novaAtlasDarkLogo}
+            alt=""
+            widths={[480, 720, 960]}
+            sizes="(min-width: 1280px) 30rem, 40vw"
+            loading="lazy"
+            decoding="async"
+            class="theme-logo-dark relative mx-auto h-auto w-full rounded-2xl"
           />
 
           <!-- Gold flourish echoing the logo's nova star -->
           <div
-            class="relative mx-auto mt-6 flex items-center justify-center gap-3"
+            class="hero-plaque-flourish relative mx-auto mt-6 flex items-center justify-center gap-3"
           >
             <span
               class="h-px w-16 bg-gradient-to-r from-transparent to-[#c39a3e]/70"
@@ -324,5 +341,43 @@ const t = useTranslations(locale);
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.85),
       0 14px 30px -14px rgb(2 7 20 / 0.5);
+  }
+
+  .theme-logo-dark {
+    display: none;
+  }
+
+  :global(html[data-theme="dark"]) .theme-logo-light {
+    display: none;
+  }
+
+  :global(html[data-theme="dark"]) .theme-logo-dark {
+    display: block;
+  }
+
+  /* The dark-mode artwork already contains its own lower divider. */
+  :global(html[data-theme="dark"]) .hero-plaque-flourish {
+    display: none;
+  }
+
+  :global(html[data-theme="dark"]) .hero-plaque > div {
+    padding: 0.75rem;
+    background: linear-gradient(145deg, #111c36 0%, #070d1a 100%);
+    border-color: rgb(227 200 138 / 0.42);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.08),
+      inset 0 0 0 1px rgb(195 154 62 / 0.08),
+      0 28px 70px -24px rgb(0 0 0 / 0.78),
+      0 0 46px rgb(195 154 62 / 0.08);
+  }
+
+  :global(html[data-theme="dark"]) .hero-plaque-mobile {
+    padding: 0.5rem;
+    background: linear-gradient(145deg, #111c36 0%, #070d1a 100%);
+    border-color: rgb(227 200 138 / 0.42);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.08),
+      0 18px 38px -16px rgb(0 0 0 / 0.72),
+      0 0 30px rgb(195 154 62 / 0.08);
   }
 </style>

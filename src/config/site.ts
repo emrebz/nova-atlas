@@ -35,6 +35,14 @@ export const site = {
     webm: "https://media.novaatlastur.com/video/nova-atlas-film.webm",
     mp4: "https://media.novaatlastur.com/video/nova-atlas-film.mp4",
   },
+  /** Vertical (9:16) Vito showcase video for the VIP transfer page. */
+  vipVideo: {
+    mp4: "https://media.novaatlastur.com/video/vito.mp4",
+  },
+  /** Decorative, silent background film for the Services page hero. */
+  servicesFilm: {
+    mp4: "https://media.novaatlastur.com/video/hizmetler-hero.mp4",
+  },
 } as const;
 
 export type WaLocale = keyof typeof site.waMessage;

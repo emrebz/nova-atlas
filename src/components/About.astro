@@ -4,6 +4,7 @@ import { useTranslations, asLocale } from "../i18n/utils";
 import Icon from "./Icon.astro";
 import Reveal from "./Reveal.astro";
 import logo from "../../docs/logo/nova-atlas-no-bg.png";
+import darkLogo from "../../docs/logo/nova-atlas-dark-mode.png";
 import tursabLogo from "../../docs/logo/tursab.png";
 
 const locale = asLocale(Astro.currentLocale);
@@ -26,18 +27,27 @@ const t = useTranslations(locale);
 
       <Reveal delay={120}>
         <figure
-          class="rounded-3xl border border-[#c39a3e]/30 p-8 shadow-[inset_0_1px_0_rgb(255_255_255/0.85),0_18px_48px_-16px_rgb(11_18_38/0.18)] sm:p-10"
-          style="background: linear-gradient(158deg, #ffffff 0%, #f4f0e8 100%);"
+          class="about-brand-panel rounded-3xl border p-8 sm:p-10"
         >
-          <Image
-            src={logo}
-            alt={t.about.logoAlt}
-            width={640}
-            densities={[1, 2]}
-            loading="lazy"
-            class="mx-auto h-auto w-full max-w-md"
-          />
-          <figcaption class="mt-4 flex items-center justify-center gap-2 text-sm font-medium text-[#5b6472]">
+          <div role="img" aria-label={t.about.logoAlt}>
+            <Image
+              src={logo}
+              alt=""
+              width={640}
+              densities={[1, 2]}
+              loading="lazy"
+              class="theme-logo-light mx-auto h-auto w-full max-w-md"
+            />
+            <Image
+              src={darkLogo}
+              alt=""
+              widths={[480, 720, 960]}
+              sizes="(min-width: 1024px) 36vw, (min-width: 640px) 32rem, calc(100vw - 6rem)"
+              loading="lazy"
+              class="theme-logo-dark mx-auto h-auto w-full max-w-lg rounded-2xl"
+            />
+          </div>
+          <figcaption class="mt-4 flex items-center justify-center gap-2 text-sm font-medium text-muted">
             <Image
               src={tursabLogo}
               alt=""
@@ -79,3 +89,36 @@ const t = useTranslations(locale);
     </div>
   </div>
 </section>
+
+<style>
+  .about-brand-panel {
+    background: linear-gradient(158deg, #ffffff 0%, #f4f0e8 100%);
+    border-color: rgb(195 154 62 / 0.3);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.85),
+      0 18px 48px -16px rgb(11 18 38 / 0.18);
+  }
+
+  .theme-logo-dark {
+    display: none;
+  }
+
+  :global(html[data-theme="dark"]) .theme-logo-light {
+    display: none;
+  }
+
+  :global(html[data-theme="dark"]) .theme-logo-dark {
+    display: block;
+  }
+
+  :global(html[data-theme="dark"]) .about-brand-panel {
+    padding: 0.75rem 0.75rem 1.5rem;
+    background: linear-gradient(145deg, #111c36 0%, #070d1a 100%);
+    border-color: rgb(227 200 138 / 0.38);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.07),
+      inset 0 0 0 1px rgb(195 154 62 / 0.07),
+      0 24px 60px -22px rgb(0 0 0 / 0.7),
+      0 0 42px rgb(195 154 62 / 0.07);
+  }
+</style>

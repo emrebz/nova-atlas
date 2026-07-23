@@ -150,7 +150,88 @@ export const tr = {
       { icon: "bed", title: "Otel & Konaklama", desc: "Seyahat planınıza uygun konaklama seçenekleri." },
       { icon: "van", title: "Taşımacılık & VIP Transfer", desc: "Personel taşımacılığı deneyimine dayanan ulaşım çözümleri." },
     ],
+    detailsCta: "Detaylı İncele",
     cta: "WhatsApp'tan Yazın",
+    page: {
+      meta: {
+        title: "Seyahat ve Ulaşım Hizmetleri | Nova Atlas Turizm",
+        description:
+          "Nova Atlas Turizm'in Çorlu çıkışlı yurt içi ve yurt dışı tur, otel rezervasyonu ve Vito ile VIP transfer hizmetlerini inceleyin.",
+      },
+      breadcrumb: "Hizmetler",
+      eyebrow: "Çorlu merkezli seyahat planlaması",
+      h1: "Yolculuğunuzu İhtiyacınıza Göre Birlikte Planlayalım",
+      lead:
+        "Tur seçeneklerinden konaklamaya, havalimanı transferinden özel gün ulaşımına kadar sunduğumuz hizmetleri tek sayfada inceleyin.",
+      countSuffix: "hizmet alanı",
+      introEyebrow: "Hizmet alanlarımız",
+      introTitle: "Her Yolculuk İçin Açık ve Ulaşılabilir Destek",
+      introBody:
+        "İhtiyacınızı dinliyor, mevcut seçenekleri açıkça paylaşıyor ve yolculuk detaylarını sizinle birlikte netleştiriyoruz.",
+      itemCta: "WhatsApp'tan Bilgi Al",
+      items: [
+        {
+          icon: "compass",
+          title: "Çorlu Çıkışlı Yurt İçi Turlar",
+          body:
+            "Kültür, doğa ve dinlenme odaklı yurt içi rota seçeneklerini Çorlu çıkışlı örnek programlarla sunuyoruz. Programlar kesinleştiğinde tarih, hareket noktası, konaklama ve içerik bilgilerini açık biçimde paylaşıyoruz.",
+          bullets: [
+            "Kültür, doğa ve günübirlik rota alternatifleri",
+            "Program, ulaşım ve konaklama seçeneklerinin birlikte değerlendirilmesi",
+            "Kesin tarihler ve fiyatlar netleştiğinde açık bilgilendirme",
+          ],
+          imageAlt: "Anadolu vadisinde yürüyen yurt içi tur misafirleri",
+          message:
+            "Merhaba, Çorlu çıkışlı yurt içi tur seçenekleri ve planlanan programlar hakkında bilgi almak istiyorum.",
+        },
+        {
+          icon: "globe",
+          title: "Yurt Dışı Turları",
+          body:
+            "Farklı bütçe ve seyahat beklentilerine uygun yurt dışı tur programları üzerinde çalışıyoruz. Rota, ulaşım ve konaklama seçenekleri netleştiğinde program içeriğini ve katılım bilgilerini anlaşılır biçimde aktarıyoruz.",
+          bullets: [
+            "Farklı seyahat beklentilerine uygun program araştırması",
+            "Ulaşım ve konaklama seçeneklerinin birlikte değerlendirilmesi",
+            "Programlar netleştiğinde tarih ve içerik bilgilendirmesi",
+          ],
+          imageAlt: "Uluslararası havalimanında valizleriyle yürüyen yolcular",
+          message:
+            "Merhaba, hazırlanmakta olan yurt dışı tur programları hakkında bilgi almak istiyorum.",
+        },
+        {
+          icon: "bed",
+          title: "Otel & Konaklama",
+          body:
+            "Tur programınıza veya bireysel seyahatinize uygun konaklama seçeneklerini; tarih, konum, kişi sayısı ve beklentilerinize göre değerlendirmenize yardımcı oluyoruz.",
+          bullets: [
+            "Seyahat tarihine ve konuma uygun seçenekler",
+            "Kişi sayısı ve konaklama beklentisine göre değerlendirme",
+            "Rezervasyon öncesinde koşulların açıkça paylaşılması",
+          ],
+          imageAlt: "Sıcak ahşap detaylara sahip aydınlık butik otel odası",
+          message:
+            "Merhaba, otel ve konaklama seçenekleri hakkında bilgi almak istiyorum. Destinasyon: …, tarih: …, kişi sayısı: …",
+        },
+        {
+          icon: "van",
+          title: "Taşımacılık & VIP Transfer",
+          body:
+            "Vito aracımızla Çorlu–İstanbul Havalimanı, Çorlu–Sabiha Gökçen, size özel rotalar, düğünler ve özel günler için ulaşım talebinizi planlıyoruz.",
+          bullets: [
+            "Çorlu çıkışlı havalimanı transferleri",
+            "Size özel kalkış ve varış rotaları",
+            "Düğün, davet ve özel gün ulaşımı",
+          ],
+          imageAlt: "Havalimanı önünde park edilmiş siyah VIP transfer aracı",
+          message:
+            "Merhaba, Vito ile VIP transfer hizmeti hakkında bilgi almak istiyorum. Rota: …, tarih/saat: …, yolcu sayısı: …",
+        },
+      ],
+      ctaTitle: "Hangi hizmete ihtiyacınız olduğunu birlikte netleştirelim",
+      ctaBody:
+        "Seyahat planınızı, tercih ettiğiniz tarihleri veya ulaşım rotanızı WhatsApp üzerinden paylaşın; size uygun seçeneklerle dönüş yapalım.",
+      cta: "WhatsApp'tan Bize Ulaşın",
+    },
   },
   vip: {
     meta: {
@@ -206,6 +287,7 @@ export const tr = {
     vehiclesTitle: "VIP Yolculuklarınız İçin Vito",
     vehiclesBody:
       "Yolcu sayınız, bagaj durumunuz ve yolculuk planınıza göre Vito ile transfer detaylarını birlikte netleştirebiliriz.",
+    videoLabel: "Vito tanıtım videosu",
     vehicles: [
       {
         icon: "van",

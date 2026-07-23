@@ -1,0 +1,262 @@
+---
+import Icon from "./Icon.astro";
+
+/**
+ * Contained, self-hosted video player with the same behaviour as the homepage
+ * brand film: muted autoplay + loop, tap-to-unmute, mute & fullscreen controls,
+ * and graceful fallbacks (reduced-motion / Save-Data → poster + play button,
+ * blocked autoplay → play button, pause when scrolled off-screen).
+ *
+ * Multi-instance safe: the script wires every `[data-video-player]` on the page
+ * and queries only within its own root, so several players can coexist.
+ */
+interface Props {
+  mp4: string;
+  webm?: string;
+  /** Optimized poster URL (pass `getImage(...).src`). */
+  poster: string;
+  /** Accessible name for the region + sound toggle. */
+  label: string;
+  /** CSS aspect-ratio, e.g. "9 / 16" (portrait) or "16 / 9". */
+  aspect?: string;
+  class?: string;
+  /** Localized control labels (reuse `t.film.*`). */
+  labels: {
+    unmute: string;
+    mute: string;
+    play: string;
+    fullscreen: string;
+    exitFullscreen: string;
+    tapForSound: string;
+  };
+}
+
+const {
+  mp4,
+  webm,
+  poster,
+  label,
+  aspect = "9 / 16",
+  class: className,
+  labels,
+} = Astro.props;
+---
+
+<figure
+  class:list={[
+    "vp group relative isolate overflow-hidden rounded-[1.75rem] bg-primary-deep text-white shadow-[0_30px_70px_rgb(2_7_20/0.45)]",
+    className,
+  ]}
+  style={`aspect-ratio:${aspect}`}
+  data-video-player
+  data-lbl-mute={labels.mute}
+  data-lbl-unmute={labels.unmute}
+  data-lbl-fs={labels.fullscreen}
+  data-lbl-exit-fs={labels.exitFullscreen}
+  aria-label={label}
+>
+  <video
+    class="vp-video absolute inset-0 h-full w-full object-cover"
+    poster={poster}
+    muted
+    loop
+    playsinline
+    preload="none"
+    disablepictureinpicture
+    aria-label={label}
+  >
+    {webm && <source src={webm} type="video/webm" />}
+    <source src={mp4} type="video/mp4" />
+  </video>
+
+  <div
+    class="vp-scrim pointer-events-none absolute inset-x-0 bottom-0 h-28"
+    aria-hidden="true"
+  >
+  </div>
+
+  <!-- Full-area tap target → toggles sound (unmute on first tap) -->
+  <button type="button" class="vp-sound absolute inset-0 z-10 cursor-pointer" aria-label={labels.unmute}>
+    <span class="sr-only">{labels.unmute}</span>
+  </button>
+
+  <!-- Center play button (autoplay blocked / reduced-motion) -->
+  <button
+    type="button"
+    class="vp-play absolute top-1/2 left-1/2 z-20 grid size-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/30 bg-black/35 text-white backdrop-blur-sm transition hover:scale-105 hover:bg-black/50"
+    aria-label={labels.play}
+    hidden
+  >
+    <Icon name="play" class="ml-1 h-7 w-7" />
+  </button>
+
+  <!-- Controls -->
+  <div class="absolute right-3 bottom-3 z-20 flex items-center gap-2">
+    <button
+      type="button"
+      class="vp-mute grid size-11 place-items-center rounded-full border border-white/25 bg-black/35 text-white backdrop-blur-sm transition hover:border-white/60 hover:bg-black/55"
+      aria-label={labels.unmute}
+    >
+      <Icon name="mute" class="vp-ic-muted h-5 w-5" />
+      <Icon name="volume" class="vp-ic-sound hidden h-5 w-5" />
+    </button>
+    <button
+      type="button"
+      class="vp-fs grid size-11 place-items-center rounded-full border border-white/25 bg-black/35 text-white backdrop-blur-sm transition hover:border-white/60 hover:bg-black/55"
+      aria-label={labels.fullscreen}
+    >
+      <Icon name="expand" class="vp-ic-expand h-5 w-5" />
+      <Icon name="minimize" class="vp-ic-minimize hidden h-5 w-5" />
+    </button>
+  </div>
+</figure>
+
+<style>
+  .vp-scrim {
+    background: linear-gradient(0deg, rgb(11 18 38 / 0.7) 0%, transparent 100%);
+  }
+  /* Icon swap keyed on the figure's state (:global reaches the child Icon SVGs) */
+  .vp[data-sound="on"] :global(.vp-ic-muted) {
+    display: none;
+  }
+  .vp[data-sound="on"] :global(.vp-ic-sound) {
+    display: block;
+  }
+  .vp[data-fs="on"] :global(.vp-ic-expand) {
+    display: none;
+  }
+  .vp[data-fs="on"] :global(.vp-ic-minimize) {
+    display: block;
+  }
+  .vp[data-state="playing"] .vp-play {
+    display: none;
+  }
+</style>
+
+<script>
+  const setupVideoPlayer = (root: HTMLElement) => {
+    if (root.dataset.vpReady === "true") return;
+    const video = root.querySelector<HTMLVideoElement>(".vp-video");
+    const soundToggle = root.querySelector<HTMLButtonElement>(".vp-sound");
+    const muteBtn = root.querySelector<HTMLButtonElement>(".vp-mute");
+    const fsBtn = root.querySelector<HTMLButtonElement>(".vp-fs");
+    const playBtn = root.querySelector<HTMLButtonElement>(".vp-play");
+    if (!video || !soundToggle || !muteBtn || !fsBtn || !playBtn) return;
+    root.dataset.vpReady = "true";
+
+    const L = {
+      mute: root.dataset.lblMute || "Mute",
+      unmute: root.dataset.lblUnmute || "Unmute",
+      fullscreen: root.dataset.lblFs || "Fullscreen",
+      exitFullscreen: root.dataset.lblExitFs || "Exit fullscreen",
+    };
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const saveData = (navigator as any).connection?.saveData === true;
+
+    const syncSound = () => {
+      const on = !video.muted;
+      root.dataset.sound = on ? "on" : "off";
+      const lbl = on ? L.mute : L.unmute;
+      muteBtn.setAttribute("aria-label", lbl);
+      soundToggle.setAttribute("aria-label", lbl);
+      const sr = soundToggle.querySelector(".sr-only");
+      if (sr) sr.textContent = lbl;
+    };
+    const setSound = (on: boolean) => {
+      video.muted = !on;
+      syncSound();
+    };
+    video.addEventListener("volumechange", syncSound);
+    syncSound();
+
+    let started = false;
+    const startPlayback = () => {
+      video.preload = "auto";
+      video.muted = true;
+      video.play().then(
+        () => {
+          root.dataset.state = "playing";
+        },
+        () => {
+          root.dataset.state = "paused";
+          playBtn.hidden = false;
+        }
+      );
+    };
+
+    // Lazy autoplay: only start once the player scrolls into view (saves data
+    // for a below-the-fold video); pause again when it leaves.
+    if (reduce || saveData) {
+      root.dataset.state = "paused";
+      playBtn.hidden = false;
+    } else if ("IntersectionObserver" in window) {
+      new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              if (!started) {
+                started = true;
+                startPlayback();
+              } else if (video.paused && root.dataset.state === "playing") {
+                video.play().catch(() => {});
+              }
+            } else if (!video.paused) {
+              video.pause();
+            }
+          }
+        },
+        { threshold: 0.35 }
+      ).observe(root);
+    } else {
+      started = true;
+      startPlayback();
+    }
+
+    playBtn.addEventListener("click", () => {
+      playBtn.hidden = true;
+      root.dataset.state = "playing";
+      setSound(true);
+      video.play().catch(() => {});
+    });
+
+    soundToggle.addEventListener("click", () => {
+      if (video.paused) {
+        root.dataset.state = "playing";
+        playBtn.hidden = true;
+        video.play().catch(() => {});
+      }
+      setSound(video.muted);
+    });
+
+    muteBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      setSound(video.muted);
+    });
+
+    fsBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const doc = document as any;
+      const el = root as any;
+      if (!doc.fullscreenElement && !doc.webkitFullscreenElement) {
+        if (el.requestFullscreen) el.requestFullscreen();
+        else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+        else if ((video as any).webkitEnterFullscreen)
+          (video as any).webkitEnterFullscreen();
+      } else {
+        (doc.exitFullscreen || doc.webkitExitFullscreen)?.call(doc);
+      }
+    });
+    const syncFs = () => {
+      const doc = document as any;
+      const on = !!(doc.fullscreenElement || doc.webkitFullscreenElement);
+      root.dataset.fs = on ? "on" : "off";
+      fsBtn.setAttribute("aria-label", on ? L.exitFullscreen : L.fullscreen);
+    };
+    document.addEventListener("fullscreenchange", syncFs);
+    document.addEventListener("webkitfullscreenchange", syncFs);
+  };
+
+  document
+    .querySelectorAll<HTMLElement>("[data-video-player]")
+    .forEach(setupVideoPlayer);
+</script>
