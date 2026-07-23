@@ -4,8 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "generate:og": "node scripts/generate-og-images.mjs",
+    "predev": "npm run generate:og",
     "dev": "astro dev",
+    "prebuild": "npm run generate:og",
     "build": "astro build",
+    "check:og": "node scripts/validate-og-metadata.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -16,5 +20,8 @@
     "@tailwindcss/vite": "^4.1.11",
     "astro": "^5.12.0",
     "tailwindcss": "^4.1.11"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5"
   }
 }

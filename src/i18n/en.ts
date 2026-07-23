@@ -9,6 +9,21 @@ export const en: Dictionary = {
       "Nova Atlas Travel in Çorlu provides domestic and international tour planning, hotel reservations, VIP transfers and reliable travel solutions.",
     ogLocale: "en_US",
   },
+  seo: {
+    imageAlt: {
+      home: "Nova Atlas Turizm brand logo and corporate colours",
+      routes: "A scenic coastal road representing Nova Atlas tour routes",
+      services:
+        "Nova Atlas Travel's domestic tours, international tours, accommodation and VIP transfer services",
+      vipTransfer: "A black Vito VIP transfer vehicle outside an airport",
+      tours: {
+        kapadokya: "Sunrise hot-air balloons above the fairy chimneys of Cappadocia",
+        pamukkale: "The white travertine terraces and turquoise thermal pools of Pamukkale",
+        karadeniz: "Misty green Black Sea highlands and a wooden mountain house",
+        ege: "A turquoise Aegean bay, sailing boat and coastal town",
+      },
+    },
+  },
   nav: {
     home: { label: "Home", anchor: "home" },
     about: { label: "About", anchor: "about" },

@@ -7,9 +7,13 @@ import About from "../components/About.astro";
 import Services from "../components/Services.astro";
 import VipTeaser from "../components/VipTeaser.astro";
 import Contact from "../components/Contact.astro";
+import { socialImages } from "../config/socialImages";
+import { useTranslations } from "../i18n/utils";
+
+const t = useTranslations("tr");
 ---
 
-<Base>
+<Base socialImage={{ ...socialImages.home, alt: t.seo.imageAlt.home }}>
   <BrandFilmHero />
   <Hero />
   <FeaturedTours />

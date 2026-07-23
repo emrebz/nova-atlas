@@ -22,9 +22,11 @@ export interface TourContent {
   goodToKnow: string[];
 }
 
+export type TourArt = "kapadokya" | "pamukkale" | "karadeniz" | "ege";
+
 export interface Tour {
   /** stable key, matches the `tourImages` map and the i18n item `art` */
-  art: string;
+  art: TourArt;
   /** localized URL slugs */
   slug: Record<Locale, string>;
   tr: TourContent;

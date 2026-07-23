@@ -1,6 +1,7 @@
 ---
 import RoutesIndex from "../../components/RoutesIndex.astro";
 import { site } from "../../config/site";
+import { socialImages } from "../../config/socialImages";
 import { tours, tourPath } from "../../data/tours";
 import { useTranslations } from "../../i18n/utils";
 import Base from "../../layouts/Base.astro";
@@ -38,6 +39,7 @@ const itemList = {
   title={page.meta.title}
   description={page.meta.description}
   alternates={alternates}
+  socialImage={{ ...socialImages.routes, alt: t.seo.imageAlt.routes }}
   extraSchema={[breadcrumb, itemList]}
 >
   <RoutesIndex />

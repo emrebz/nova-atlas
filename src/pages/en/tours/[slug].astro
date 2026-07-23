@@ -2,6 +2,7 @@
 import Base from "../../../layouts/Base.astro";
 import TourDetail from "../../../components/TourDetail.astro";
 import { site } from "../../../config/site";
+import { socialImages } from "../../../config/socialImages";
 import { useTranslations } from "../../../i18n/utils";
 import { tours, tourPath, type Tour } from "../../../data/tours";
 
@@ -26,6 +27,8 @@ const title = `${content.name} — ${d.metaTitleSuffix} | ${site.brand}`;
 const description = `${content.name}: ${content.tagline}. ${content.duration}.`;
 const alternates = { tr: tourPath(tour, "tr"), en: tourPath(tour, "en") };
 const pageUrl = new URL(alternates.en, site.url).href;
+const socialImageKey = tour.art;
+const socialImage = socialImages.tours[socialImageKey];
 
 const breadcrumb = {
   "@context": "https://schema.org",
@@ -57,6 +60,8 @@ const trip = {
   title={title}
   description={description}
   alternates={alternates}
+  socialImage={{ ...socialImage, alt: t.seo.imageAlt.tours[socialImageKey] }}
+  ogType="article"
   extraSchema={[breadcrumb, trip]}
 >
   <TourDetail tour={tour} content={content} locale={locale} />

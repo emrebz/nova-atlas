@@ -12,6 +12,21 @@ export const tr = {
       "Çorlu merkezli Nova Atlas Turizm; yurt içi ve yurt dışı turlar, otel rezervasyonu, VIP transfer ve güvenli seyahat planlamasında yanınızda.",
     ogLocale: "tr_TR",
   },
+  seo: {
+    imageAlt: {
+      home: "Nova Atlas Turizm marka logosu ve kurumsal renkleri",
+      routes: "Deniz kıyısına uzanan manzaralı bir yol ve tur rotası",
+      services:
+        "Nova Atlas Turizm'in yurt içi tur, yurt dışı tur, konaklama ve VIP transfer hizmetleri",
+      vipTransfer: "Havalimanı önünde siyah Vito VIP transfer aracı",
+      tours: {
+        kapadokya: "Kapadokya'da peribacaları üzerinde gün doğumu ve sıcak hava balonları",
+        pamukkale: "Pamukkale'nin beyaz travertenleri ve turkuaz termal suları",
+        karadeniz: "Karadeniz'de sisli yeşil yaylalar ve ahşap yayla evi",
+        ege: "Ege kıyısında turkuaz koy, yelkenli tekne ve sahil kasabası",
+      },
+    },
+  },
   nav: {
     home: { label: "Ana Sayfa", anchor: "anasayfa" },
     about: { label: "Hakkımızda", anchor: "hakkimizda" },

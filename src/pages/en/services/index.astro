@@ -1,6 +1,7 @@
 ---
 import ServicesPage from "../../../components/ServicesPage.astro";
 import { site } from "../../../config/site";
+import { socialImages } from "../../../config/socialImages";
 import { useTranslations } from "../../../i18n/utils";
 import Base from "../../../layouts/Base.astro";
 
@@ -41,6 +42,7 @@ const itemList = {
   title={page.meta.title}
   description={page.meta.description}
   alternates={alternates}
+  socialImage={{ ...socialImages.services, alt: t.seo.imageAlt.services }}
   extraSchema={[breadcrumb, itemList]}
 >
   <ServicesPage />

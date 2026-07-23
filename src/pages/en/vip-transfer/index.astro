@@ -1,6 +1,7 @@
 ---
 import VipTransferPage from "../../../components/VipTransferPage.astro";
 import { site } from "../../../config/site";
+import { socialImages } from "../../../config/socialImages";
 import { useTranslations } from "../../../i18n/utils";
 import Base from "../../../layouts/Base.astro";
 
@@ -49,6 +50,7 @@ const service = {
   title={v.meta.title}
   description={v.meta.description}
   alternates={alternates}
+  socialImage={{ ...socialImages.vipTransfer, alt: t.seo.imageAlt.vipTransfer }}
   extraSchema={[breadcrumb, service]}
 >
   <VipTransferPage />
